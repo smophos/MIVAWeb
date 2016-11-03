@@ -151,11 +151,12 @@ body{
   stroke: #ddd;
 }
 
-path.line {
+/*path.line {
   fill: #4F867F;
   stroke: #4F867F;
   stroke-width: .5px;
 }
+*/
 
 rect.pane {
   cursor: move;
@@ -222,7 +223,11 @@ nav li.active a:before{
 nav li.active a:after{
     border-bottom:1px solid #fff;
 }
-
+.line {
+  fill: none;
+  stroke: #4F867F;
+  stroke-width: 3px;
+}
 
 </style>
 
@@ -448,6 +453,8 @@ d3.select("#currentPAP").append("text")
 				//	.attr("y",function(d){ return height/d.h +10 ;});
 
 }
+
+/*
 d3.select("body").append("svg").attr("id","graphs").attr("width",width/1.3).attr("height",900);
  var svgnew = d3.select("#graphs"),
             margin = {top: 0, right: 20, bottom: 815, left: 40},
@@ -815,38 +822,508 @@ d3.select("body").append("svg").attr("id","graphs").attr("width",width/1.3).attr
 
         context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
     }
-d3.select("body").append("svg").attr("id","currentreadings").attr("width",width/6.5).attr("height",900);
+
+    */
+
+d3.select("body").append("svg").attr("id","firstgraph").attr("width",width/1.2).attr("height",900);
+
+var nfirst = 60,
+    randomfirst = d3.randomNormal(0, .45),
+    datafirst = d3.range(nfirst).map(randomfirst);
+
+
+var svgline = d3.select("#firstgraph"),
+    margin1 = {top: 10, right: 20, bottom: 690, left: 40},
+    widthfirstline = +svgline.attr("width") - margin1.left - margin1.right,
+    heightfirstline = +svgline.attr("height") - margin1.top - margin1.bottom,
+    g = svgline.append("g").attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");
+
+var xfirst = d3.scaleLinear()
+    .domain([0, nfirst - 1])
+    .range([0, widthfirstline]);
+
+var yfirst = d3.scaleLinear()
+    .domain([-1, 1])
+    .range([heightfirstline, 0]);
+
+var firstline = d3.line()
+    .x(function(d, i) { return xfirst(i); })
+    .y(function(d, i) { return yfirst(d); });
+
+g.append("rect")
+	.attr("width",widthfirstline)
+	.attr("height",30)
+	.attr("x",0)
+	.attr("y",0)
+	.attr("fill","#661616")
+	.attr("opacity",0.4);
+
+g.append("rect")
+	.attr("width",widthfirstline)
+	.attr("height",heightfirstline -30)
+	.attr("x",0)
+	.attr("y",30)
+	.attr("fill","#5F5A5A")
+	.attr("opacity",0.4);
+
+
+g.append("defs").append("clipPath")
+    .attr("id", "clip")
+  	.append("rect")
+  	.attr("width", widthfirstline)
+    .attr("height", heightfirstline)
+    .on("mouseover", function(){console.log("sneha");});
+
+g.append("g")
+    .attr("class", "axis axis--x")
+    .attr("fill","black")
+   	.attr("transform", "translate(0," + yfirst(0) + ")")
+    .call(d3.axisBottom(xfirst));
+
+g.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(yfirst));
+
+g.append("line")
+	.style("stroke-dasharray", ("10,3")) // make the stroke dashed
+    .style("stroke", "red") 
+    .attr("x1",0)
+    .attr("x2",widthfirstline)
+    .attr("y1",30)
+    .attr("y2",30);  
+
+var path = g.append("g")
+  .attr("clip-path", "url(#clip)")
+  .append("path")
+  .datum(datafirst)
+  .attr("class", "line")
+  .transition()
+  .duration(2000)
+  .ease(d3.easeLinear)
+  .on("start", tick);
+
+console.log(datafirst);
+
+function tick() {
+
+  // Push a new data point onto the back.
+  generateddata = datafirst.push(randomfirst());
+  console.log(generateddata);
+  // Redraw the line.
+  d3.select(this)
+      .attr("d", firstline)
+      .attr("transform", null);
+
+  // Slide it to the left.
+  d3.active(this)
+    .attr("transform", "translate(" + xfirst(-1) + ",0)")
+    .transition()
+    .on("start", tick);
+
+  // Pop the old data point off the front.
+  datafirst.shift();
+
+}
+
+var nsecond = 60,
+    randomsecond = d3.randomNormal(0, .45),
+    datasecond = d3.range(nsecond).map(randomsecond);
+
+
+var svgline = d3.select("#firstgraph"),
+    margin2 = {top: 230, right: 20, bottom: 470, left: 40},
+    widthsecondline = +svgline.attr("width") - margin2.left - margin2.right,
+    heightsecondline = +svgline.attr("height") - margin2.top - margin2.bottom,
+    g = svgline.append("g").attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+var xsecond = d3.scaleLinear()
+    .domain([0, nsecond - 1])
+    .range([0, widthsecondline]);
+
+var ysecond = d3.scaleLinear()
+    .domain([-1, 1])
+    .range([heightsecondline, 0]);
+
+var secondline = d3.line()
+    .x(function(d, i) { return xsecond(i); })
+    .y(function(d, i) { return ysecond(d); });
+
+g.append("rect")
+	.attr("width",widthsecondline)
+	.attr("height",30)
+	.attr("x",0)
+	.attr("y",0)
+	.attr("fill","#661616")
+	.attr("opacity",0.4);
+
+g.append("rect")
+	.attr("width",widthsecondline)
+	.attr("height",heightsecondline -30)
+	.attr("x",0)
+	.attr("y",30)
+	.attr("fill","#5F5A5A")
+	.attr("opacity",0.4);
+
+
+g.append("defs").append("clipPath")
+    .attr("id", "clip")
+  	.append("rect")
+  	.attr("width", widthsecondline)
+    .attr("height", heightsecondline);
+   
+
+g.append("g")
+    .attr("class", "axis axis--x")
+    .attr("fill","black")
+   	.attr("transform", "translate(0," + ysecond(0) + ")")
+    .call(d3.axisBottom(xsecond));
+
+g.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(ysecond));
+
+g.append("line")
+	.style("stroke-dasharray", ("10,3")) // make the stroke dashed
+    .style("stroke", "red") 
+    .attr("x1",0)
+    .attr("x2",widthsecondline)
+    .attr("y1",30)
+    .attr("y2",30);  
+
+var path = g.append("g")
+  .attr("clip-path", "url(#clip)")
+  .append("path")
+  .datum(datasecond)
+  .attr("class", "line")
+  .transition()
+  .duration(2000)
+  .ease(d3.easeLinear)
+  .on("start", tick);
 
 
 
-var currentcircles = d3.select("#currentreadings").append("circle")
-					.attr("cx",160)
-					.attr("cy", 80)
-					.attr("r", width/50)
-					.attr("stroke", "#4F867F")
-					.attr("stroke-width",2)
-					.attr("fill","#282828");
+console.log(datafirst);
+
+function tick() {
+
+  // Push a new data point onto the back.
+  generateddata = datasecond.push(randomsecond());
+  console.log(generateddata);
+  // Redraw the line.
+  d3.select(this)
+      .attr("d", secondline)
+      .attr("transform", null);
+
+  // Slide it to the left.
+  d3.active(this)
+    .attr("transform", "translate(" + xsecond(-1) + ",0)")
+    .transition()
+    .on("start", tick);
+
+  // Pop the old data point off the front.
+  datasecond.shift();
+
+}
+
+var nthird = 60,
+    randomthird = d3.randomNormal(0, .45),
+    datathird = d3.range(nthird).map(randomthird);
+
+
+var svgline = d3.select("#firstgraph"),
+    margin3 = {top: 460, right: 20, bottom: 240, left: 40},
+    widththirdline = +svgline.attr("width") - margin3.left - margin3.right,
+    heightthirdline = +svgline.attr("height") - margin3.top - margin3.bottom,
+    g = svgline.append("g").attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
+
+var xthird = d3.scaleLinear()
+    .domain([0, nthird - 1])
+    .range([0, widththirdline]);
+
+var ythird = d3.scaleLinear()
+    .domain([-1, 1])
+    .range([heightthirdline, 0]);
+
+var thirdline = d3.line()
+    .x(function(d, i) { return xthird(i); })
+    .y(function(d, i) { return ythird(d); });
+
+g.append("rect")
+	.attr("width",widththirdline)
+	.attr("height",30)
+	.attr("x",0)
+	.attr("y",0)
+	.attr("fill","#661616")
+	.attr("opacity",0.4);
+
+g.append("rect")
+	.attr("width",widththirdline)
+	.attr("height",heightthirdline -30)
+	.attr("x",0)
+	.attr("y",30)
+	.attr("fill","#5F5A5A")
+	.attr("opacity",0.4);
+
+
+g.append("defs").append("clipPath")
+    .attr("id", "clip")
+  	.append("rect")
+  	.attr("width", widththirdline)
+    .attr("height", heightthirdline);
+   
+
+g.append("g")
+    .attr("class", "axis axis--x")
+    .attr("fill","black")
+   	.attr("transform", "translate(0," + ysecond(0) + ")")
+    .call(d3.axisBottom(xsecond));
+
+g.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(ythird));
+
+g.append("line")
+	.style("stroke-dasharray", ("10,3")) // make the stroke dashed
+    .style("stroke", "red") 
+    .attr("x1",0)
+    .attr("x2",widththirdline)
+    .attr("y1",30)
+    .attr("y2",30);  
+
+var path = g.append("g")
+  .attr("clip-path", "url(#clip)")
+  .append("path")
+  .datum(datathird)
+  .attr("class", "line")
+  .transition()
+  .duration(2000)
+  .ease(d3.easeLinear)
+  .on("start", tick);
+
+
+
+console.log(datathird);
+
+function tick() {
+
+  // Push a new data point onto the back.
+  generateddata = datathird.push(randomthird());
+  console.log(generateddata);
+  // Redraw the line.
+  d3.select(this)
+      .attr("d", thirdline)
+      .attr("transform", null);
+
+  // Slide it to the left.
+  d3.active(this)
+    .attr("transform", "translate(" + xthird(-1) + ",0)")
+    .transition()
+    .on("start", tick);
+
+  // Pop the old data point off the front.
+  datathird.shift();
+
+}   
+var nfourth = 60,
+    randomfourth = d3.randomNormal(0, .45),
+    datafourth = d3.range(nfourth).map(randomfourth);
+
+
+var svgline = d3.select("#firstgraph"),
+    margin4 = {top: 670, right: 20, bottom: 30, left: 40},
+    widthfourthline = +svgline.attr("width") - margin4.left - margin4.right,
+    heightfourthline = +svgline.attr("height") - margin4.top - margin4.bottom,
+    g = svgline.append("g").attr("transform", "translate(" + margin4.left + "," + margin4.top + ")");
+
+var xfourth = d3.scaleLinear()
+    .domain([0, nfourth - 1])
+    .range([0, widthfourthline]);
+
+var yfourth = d3.scaleLinear()
+    .domain([-1, 1])
+    .range([heightfourthline, 0]);
+
+var fourthline = d3.line()
+    .x(function(d, i) { return xfourth(i); })
+    .y(function(d, i) { return yfourth(d); });
+
+g.append("rect")
+	.attr("width",widthfourthline)
+	.attr("height",30)
+	.attr("x",0)
+	.attr("y",0)
+	.attr("fill","#661616")
+	.attr("opacity",0.4);
+
+g.append("rect")
+	.attr("width",widthfourthline)
+	.attr("height",heightfourthline -30)
+	.attr("x",0)
+	.attr("y",30)
+	.attr("fill","#5F5A5A")
+	.attr("opacity",0.4);
+
+
+g.append("defs").append("clipPath")
+    .attr("id", "clip")
+  	.append("rect")
+  	.attr("width", widthfourthline)
+    .attr("height", heightfourthline);
+   
+
+g.append("g")
+    .attr("class", "axis axis--x")
+    .attr("fill","black")
+   	.attr("transform", "translate(0," + ysecond(0) + ")")
+    .call(d3.axisBottom(xfourth));
+
+g.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(yfourth));
+
+g.append("line")
+	.style("stroke-dasharray", ("10,3")) // make the stroke dashed
+    .style("stroke", "red") 
+    .attr("x1",0)
+    .attr("x2",widthfourthline)
+    .attr("y1",30)
+    .attr("y2",30);  
+
+var path = g.append("g")
+  .attr("clip-path", "url(#clip)")
+  .append("path")
+  .datum(datafourth)
+  .attr("class", "line")
+  .transition()
+  .duration(2000)
+  .ease(d3.easeLinear)
+  .on("start", tick);
+
+
+
+console.log(datafourth);
+
+function tick() {
+
+  // Push a new data point onto the back.
+  generateddata = datafourth.push(randomfourth());
+  console.log(generateddata);
+  // Redraw the line.
+  d3.select(this)
+      .attr("d", fourthline)
+      .attr("transform", null);
+
+  // Slide it to the left.
+  d3.active(this)
+    .attr("transform", "translate(" + xfourth(-1) + ",0)")
+    .transition()
+    .on("start", tick);
+
+  // Pop the old data point off the front.
+  datafourth.shift();
+
+}   
+
+/*var n = 20,
+    random = d3.randomNormal(0, .2),
+    datasecond = d3.range(n).map(random);
+
+var svgline = d3.select("#secondgraph"),
+    margin = {top: 20, right: 20, bottom: 20, left: 40},
+    widthsecondline = +svgline.attr("width") - margin.left - margin.right,
+    heightsecondline = +svgline.attr("height") - margin.top - margin.bottom,
+    g = svgline.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var xsecond = d3.scaleLinear()
+    .domain([0, n - 1])
+    .range([0, widthsecondline]);
+
+var ysecond = d3.scaleLinear()
+    .domain([-1, 1])
+    .range([heightsecondline, 0]);
+
+var secondline = d3.line()
+    .x(function(d, i) { return xsecond(i); })
+    .y(function(d, i) { return ysecond(d); });
+
+g.append("defs").append("clipPath")
+    .attr("id", "clip")
+  	.append("rect")
+  	.attr("width", widthsecondline)
+    .attr("height", heightsecondline);
+
+g.append("g")
+    .attr("class", "axis axis--x")
+    .attr("fill","grey")
+   	.attr("transform", "translate(0," + ysecond(0) + ")")
+    .call(d3.axisBottom(xsecond));
+
+g.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(ysecond));
+
+g.append("g")
+  .attr("clip-path", "url(#clip)")
+  .append("path")
+  .datum(datasecond)
+  .attr("class", "line")
+  .transition()
+  .duration(1000)
+  .ease(d3.easeLinear)
+  .on("start", tick);
+
+function tick() {
+
+  // Push a new data point onto the back.
+  datasecond.push(random());
+
+  // Redraw the line.
+  d3.select(this)
+      .attr("d", secondline)
+      .attr("transform", null);
+
+  // Slide it to the left.
+  d3.active(this)
+    .attr("transform", "translate(" + xsecond(-1) + ",0)")
+    .transition()
+    .on("start", tick);
+
+  // Pop the old data point off the front.
+  datasecond.shift();
+
+}
+
+*/
+
+
+d3.select("body").append("svg").attr("id","currentreadings").attr("width",width/6.6).attr("height",900);
 
 var medsboxes = d3.select("#currentreadings").append("rect")
 					.attr("width", width/11)
-					.attr("height",height/23)
-					.attr("x", 50)
-					.attr("y", 65)
-					.attr("rx",width/50)
-					.attr("ry",10)
-					.attr("stroke", "#4F867F")
+					.attr("height",height/17)
+					.attr("x", width/30)
+					.attr("y", height/8)
+					.attr("stroke", "#3D3737")
 					.attr("stroke-width",2)
 				//	.attr("class","current")
-					.attr("fill","#282828");
+					.attr("fill","#4F867F");
 
 d3.select("#currentreadings").append("text")
 								.text("56")
 								.attr("fill","white")
-								.attr("font-size",60)
-								.attr("x",80)
-								.attr("y", 57)
+								.attr("font-size",width/23)
+								.attr("x",width/20)
+								.attr("y", height/8.5)
 								.attr("id","PAP")
 								.attr("font-weight","bold");
+
+d3.select("#currentreadings").append("text")
+								.text("PAP")
+								.attr("fill","white")
+								.attr("font-size",width/40)
+								.attr("x",width/21)
+								.attr("y",height/5.5)
+								.attr("font-weight","bold");								
 
 var inter = setInterval(function() {
                 updateData();
@@ -861,41 +1338,39 @@ function getRandomInt(min, max){
 			d3.select("#currentreadings").selectAll("#PAP").remove();
 			d3.select("#currentreadings").append("text").text(newNumber)
 			.attr("fill", function(){if(newNumber <70) return 'white'; else return '#EA7A1E';})
-			.attr("font-size",60)
-			.attr("x",80)
-			.attr("y",57)
+			.attr("font-size",width/23)
+			.attr("x",width/20)
+			.attr("y",height/8.5)
 			.attr("id","PAP")
 			.attr("font-weight","bold");
 			
 	
 }
-var currentcircles = d3.select("#currentreadings").append("circle")
-					.attr("cx",160)
-					.attr("cy", 260)
-					.attr("r", width/50)
-					.attr("stroke", "#4F867F")
-					.attr("stroke-width",2)
-					.attr("fill","#282828")
-
 var medsboxes = d3.select("#currentreadings").append("rect")
 					.attr("width", width/11)
-					.attr("height",height/23)
-					.attr("x", 50)
-					.attr("y", 245)
-					.attr("rx",width/50)
-					.attr("ry",10)
-					.attr("stroke", "#4F867F")
+					.attr("height",height/17)
+					.attr("x", width/30)
+					.attr("y", height/1.9)
+					.attr("stroke", "#3D3737")
 					.attr("stroke-width",2)
-					.attr("fill","#282828");
+					.attr("fill","#4F867F");
 
 d3.select("#currentreadings").append("text")
 								.text("67")
 								.attr("fill","white")
-								.attr("font-size",60)
-								.attr("x",80)
-								.attr("y", 237)
+								.attr("font-size",width/23)
+								.attr("x",width/20)
+								.attr("y", height/1.93)
 								.attr("id","SVO2")
 								.attr("font-weight","bold");
+
+d3.select("#currentreadings").append("text")
+								.text("SVO2")
+								.attr("fill","white")
+								.attr("font-size",width/40)
+								.attr("x",width/21)
+								.attr("y", height/1.74)
+								.attr("font-weight","bold");								
 
 var inter = setInterval(function() {
                 updateDataSVO2();
@@ -909,42 +1384,40 @@ var inter = setInterval(function() {
 			d3.select("#currentreadings").append("text")
 								.text(newNumberSVO2)
 								.attr("fill",function(){if(newNumberSVO2>70) return '#EA7A1E'; else return 'white';})
-								.attr("font-size",60)
-								.attr("x",80)
-								.attr("y", 237)
+								.attr("font-size",width/23)
+								.attr("x",width/20)
+								.attr("y", height/1.93)
 								.attr("id","SVO2")
 								.attr("font-weight","bold");
 			
 	
 }
-var currentcircles = d3.select("#currentreadings").append("circle")
-					.attr("cx",160)
-					.attr("cy", 460)
-					.attr("r", width/50)
-					.attr("stroke", "#4F867F")
-					.attr("stroke-width",2)
-					.attr("fill","#282828")
-
 var medsboxes = d3.select("#currentreadings").append("rect")
 					.attr("width", width/11)
-					.attr("height",height/23)
-					.attr("x", 50)
-					.attr("y", 445)
-					.attr("rx",width/50)
-					.attr("ry",10)
-					.attr("stroke", "#4F867F")
+					.attr("height",height/17)
+					.attr("x", width/30)
+					.attr("y", height/1.1)
+					.attr("stroke", "#3D3737")
 					.attr("stroke-width",2)
 				//	.attr("class","current")
-					.attr("fill","#282828");
+					.attr("fill","#4F867F");
 
 d3.select("#currentreadings").append("text")
 								.text("77")
 								.attr("fill","white")
-								.attr("font-size",60)
-								.attr("x",80)
-								.attr("y", 437)
+								.attr("font-size",width/23)
+								.attr("x",width/20)
+								.attr("y", height/1.1)
 								.attr("id","HR")
 								.attr("font-weight","bold");
+
+d3.select("#currentreadings").append("text")
+								.text("HR")
+								.attr("fill","white")
+								.attr("font-size",width/40)
+								.attr("x",width/21)
+								.attr("y", height/1.04)
+								.attr("font-weight","bold");								
 
 var inter = setInterval(function() {
                 updateDataHR();
@@ -955,42 +1428,43 @@ var inter = setInterval(function() {
 			d3.select("#currentreadings").selectAll("#HR").remove();
 			d3.select("#currentreadings").append("text").text(newNumberHR)
 			.attr("fill", function(){if(newNumberHR <50) return 'white'; else return '#EA7A1E';})
-			.attr("font-size",60).attr("x",80)
-			.attr("y",437)
+			.attr("font-size",width/23)
+			.attr("x",width/20)
+			.attr("y",height/1.1)
 			.attr("id","HR")
 			.attr("font-weight","bold");
 			
 	
 }
 
-var currentcircles = d3.select("#currentreadings").append("circle")
-					.attr("cx",160)
-					.attr("cy", 675)
-					.attr("r", width/50)
-					.attr("stroke", "#4F867F")
-					.attr("stroke-width",2)
-					.attr("fill","#282828")
-
 var medsboxes = d3.select("#currentreadings").append("rect")
 					.attr("width", width/11)
-					.attr("height",height/23)
-					.attr("x", 50)
-					.attr("y", 660)
-					.attr("rx",width/50)
-					.attr("ry",10)
-					.attr("stroke", "#4F867F")
+					.attr("height",height/17)
+					.attr("x", width/30)
+					.attr("y", height + height/5)
+					.attr("stroke", "#3D3737")
 					.attr("stroke-width",2)
 				//	.attr("class","current")
-					.attr("fill","#282828");
+					.attr("fill","#4F867F");
+
 
 d3.select("#currentreadings").append("text")
 								.text("34")
 								.attr("fill","white")
-								.attr("font-size",60)
+								.attr("font-size",width/23)
 								.attr("font-weight",'bold')
-								.attr("x",80)
-								.attr("y", 650)
+								.attr("x",width/20)
+								.attr("y", height + height/5)
 								.attr("id","BPM");
+
+d3.select("#currentreadings").append("text")
+								.text("BPM")
+								.attr("fill","white")
+								.attr("font-size",width/40)
+								.attr("font-weight",'bold')
+								.attr("x",width/21)
+								.attr("y", height + height/4.05);
+																
 
 var interBPM = setInterval(function() {
                 updateDataBPM();
@@ -1000,7 +1474,7 @@ var interBPM = setInterval(function() {
 			var newNumberBPM = getRandomInt(20,80);
 			d3.select("#currentreadings").selectAll("#BPM").remove();
 			d3.select("#currentreadings").append("text").text(newNumberBPM).attr("fill", function(){if(newNumberBPM <60) return 'white'; else return '#EA7A1E';})
-			.attr("font-size",60).attr("x",80).attr("y",650)
+			.attr("font-size",width/23).attr("x",width/20).attr("y",height + height/5)
 			.attr("id","BPM")
 			.attr("font-weight","bold");
 			
