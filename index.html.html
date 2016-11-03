@@ -1,0 +1,1528 @@
+<meta charset="utf-8">
+<html>
+<head>
+</head>
+<style type="text/css">
+
+body{
+	font-family: "Helvetica", Sans-Serif; 
+}
+.hover1:hover{
+	fill: #B6BCD2;
+	stroke: white;
+	cursor: pointer;
+
+}
+
+.hover2:hover{
+	fill: #A19CA1;
+	stroke: white;
+	cursor: pointer;
+}
+.MedsTabs:hover{
+	opacity: 0.7;
+	stroke: white;
+	cursor: pointer;
+}
+
+.MedsTabsdata:hover{
+	opacity: 0.7;
+	cursor: pointer;
+}
+.path { 
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
+}
+
+.closebuttons {
+	cursor: pointer;
+
+}
+.addnewpatient {
+	width: 75%;
+	height: 7%;
+	background-color: #b4b1b1;
+	border-radius: 6px;
+	display: inline-block;
+	padding: 12px;
+	margin-top: 5px;
+	margin-bottom: 0px;
+
+}
+.submitbutton{
+	width: 22%;
+	height:7%;
+	background-color: #82ad6a;
+	padding: 10px;
+	border-radius: 6px;
+	color: white;
+	margin-left: 2%;
+	cursor:pointer;
+	border: 1px solid #ccc;
+	display: inline-block;
+
+}
+.addnewnote {
+	width: 75%;
+	height: 5%;
+	background-color: #b4b1b1;
+	border-radius: 6px;
+	padding: 8px;
+	margin-top: 5px;
+	margin-left: 1%;
+
+}
+.submitbuttonnote{
+	width: 20%;
+	height:5%;
+	background-color: #B85B3D;
+	padding: 8px;
+	border-radius: 6px;
+	color: white;
+	cursor:pointer;
+	border: 1px solid #ccc;
+	display: inline-block;
+	font-size: 11px;
+
+}
+.submitbutton:hover{
+	opacity: 0.7;
+	border: 2px solid #edf1eb;
+
+}
+.submitbuttonnote:hover{
+	opacity: 0.7;
+	
+
+}
+.notes{
+	visibility: hidden;
+	position: absolute;
+	top: 340px;
+	width: 90%;
+	
+}
+
+.area {
+        fill: #307C6B;
+        clip-path: url(#clip);
+       	border-style: solid;
+    	border-color: green;
+}
+.current{
+	border-style: dotted;
+    border-width: thick;
+     border-color: green;
+}
+    .zoom {
+        cursor: move;
+        fill: none;
+        pointer-events: all;
+    }
+
+.axis {
+  shape-rendering: crispEdges;
+}
+
+.axis path, .axis line {
+  fill: none;
+  stroke-width: .5px;
+}
+
+.x.axis path {
+  stroke: #000;
+}
+
+.x.axis line {
+  stroke: #4F867F;
+  stroke-opacity: .5;
+}
+
+.y.axis line {
+  stroke: #ddd;
+}
+
+/*path.line {
+  fill: #4F867F;
+  stroke: #4F867F;
+  stroke-width: .5px;
+}
+*/
+
+rect.pane {
+  cursor: move;
+  fill: #8E3324;
+  pointer-events: all;
+}
+
+a{
+    text-decoration-color: black;
+    text-align:center;
+    outline:none;
+
+}
+
+nav a:hover{
+	
+	color: #A9C0B5;
+	background-color: white;
+	cursor: pointer;
+}
+nav li{
+    display:inline-block;
+    border-bottom:1px solid #A9C0B5;
+    margin-left:-20px;
+
+}
+nav a{
+    color:#fff;
+    background:#A9C0B5;
+    position:relative;
+    display:inline-block;
+    margin:0 22px;
+    padding:8px 11px;
+
+    text-shadow: 0 1px 0 rgba(0,2,0,0.4);
+    border-radius:7px 7px 0 0; /* just to smooth the top edges */
+}
+nav a:before,
+nav a:after{
+    content:" ";
+    position: absolute;
+    top:0;
+    width: 23px;
+    height: 100%;
+    background-color: inherit;
+}
+nav a:before{
+    border-radius: 12px 0 0 0;
+    transform: skew(-24deg);
+    left: -13px; /* play with this one to give the LI border ~2px extrusion */
+}
+nav a:after{
+    border-radius: 0 12px 0 0;
+    transform: skew(24deg);
+    right: -13px; /* play with this one to give the LI border ~2px extrusion */
+    border-right: 1px solid #A9C0B5;
+    z-index: 1; /* overlap next element */
+}
+/* LI ACTIVE  */
+
+nav li.active a:before{
+    z-index: 1; /* overlap prev element */
+}
+nav li.active a:after{
+    border-bottom:1px solid #fff;
+}
+.line {
+  fill: none;
+  stroke: #4F867F;
+  stroke-width: 3px;
+}
+
+</style>
+
+<body bgcolor = "#4A4B4B">
+
+
+<form name="myform" onSubmit="return addnew()" id ="addnotes" class ="notes">
+	<input type ="text" id = "newnote" placeholder = "Add your note&hellip;"class ="addnewnote">
+	<input type = "submit" value = "Add new note" name = "Submit" class ="submitbuttonnote">
+</form>
+
+	<script type="text/javascript" src="http://dc-js.github.io/dc.js/js/d3.js"></script>
+    <script type="text/javascript" src="http://dc-js.github.io/dc.js/js/crossfilter.js"></script>
+    <script type="text/javascript" src="http://dc-js.github.io/dc.js/js/dc.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+ 	<script src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+   
+<!--	<script type="text/javascript" src="d3.min.js"></script> -->
+	<script type="text/javascript">
+var w = window,
+	d = document,
+	e = d.documentElement,
+	g = d.getElementsByTagName('body')[0],
+	x = w.innerWidth || e.clientWidth || g.clientWidth ,
+	y = w.innerHeight|| e.clientHeight|| g.clientHeight ;
+
+var width = x - 30;
+var height = y - 20;  
+var noteson =0;  
+
+var dataset = [];
+function addnew(event){
+	console.log(document.getElementById("newpatient").value)
+	dataset.push(document.getElementById("newpatient").value)
+	return false;
+}
+
+console.log(width);
+console.log(height);    
+
+
+ 
+
+ d3.csv("patientnames.csv", function(d){
+	length = d3.selectAll(d).size();
+	console.log(length);
+
+function addnew(event){
+	console.log(document.getElementById("newpatient").value)
+	d.push(document.getElementById("newpatient").value)
+	return false;
+}
+
+var svg = d3.select("body").append("svg").attr("width",width).attr("height", height/16).attr("id","base1").attr("y",0);
+			
+var rect = d3.select("#base1").selectAll("rect").data(d).enter().append("rect")
+			.attr("width", function(d,i){return width/length;})
+			.attr("height",height/16)
+			.attr("x",function(d,i){return i* width/length;})
+			.attr("y",10)
+			.attr("fill","#A0A9C9")
+			.attr("rx",14)
+			.attr("ry",14)
+			.attr("stroke","grey")
+			.attr("class", "hover1")
+			.on("click", function(d,i){d3.select("svg").append("text").attr("font-size", width/50).attr("y", y/8)
+										.attr("x", i* width/6).text(function(){return d.names1;})});	
+
+var names = d3.select("#base1").selectAll("text").data(d).enter().append("text")
+			.attr("font-size", width/75)
+			.attr("fill", "#3e3d3d")
+			.text(function (d){return d.name;})
+			.attr("y", height/18)
+			.attr("class", "MedsTabsdata")
+			.attr("x", function(d,i){return i*width/6 + width/24;});
+
+var closebutton1 = d3.select("#base1").append("text").attr("x",width -50).attr("y",25).text("Close").attr("font-size",width/70).attr("fill","#d0d0d0")
+					.on("click", function(d,i){d3.select("#base1").remove();}).attr("class","closebuttons");
+
+var svg = d3.select("body").append("svg").attr("width",width).attr("height", height/16).attr("id","base2");
+			
+var rect = d3.select("#base2").selectAll("rect").data(d).enter().append("rect")
+			.attr("width", function(d,i){return width/length;})
+			.attr("height",height/16)
+			.attr("x",function(d,i){return i* width/length;})
+			.attr("y",10)
+			.attr("fill","#8F898F")
+			.attr("rx",14)
+			.attr("ry",14)
+			.attr("stroke","grey")
+			.attr("class", "hover2")
+			.on("click", function(d,i){d3.select("svg").append("text").attr("font-size", width/50).attr("y", y/8)
+										.attr("x", i* width/6).text(function(){return d.names1;})});	
+
+var names = d3.select("#base2").selectAll("text").data(d).enter().append("text")
+			.attr("font-size", width/75)
+			.attr("fill", "#3e3d3d")
+			.text(function (d) { return d.name2 ; })
+			.attr("y", height/18)
+			.attr("class", "MedsTabsdata")
+			.attr("x", function(d,i){return i*width/6 + width/24;});
+
+var closebutton2 = d3.select("#base2").append("text").attr("x",width-50).attr("y",25).text("Close").attr("font-size",width/70).attr("fill","#d0d0d0")
+					.on("click", function(d,i){d3.select("#base2").remove();}).attr("class","closebuttons");
+
+var svg = d3.select("body").append("svg").attr("width",width).attr("height", height/5.5).attr("id","StaticInfo");
+			d3.select("#StaticInfo").append("rect")
+			.attr("x",5).attr("y",10)
+			.attr("width", width-10)
+			.attr("height", height/5.5 -15)
+			.attr("stroke","white" )
+			.attr("fill","#3e3d3d");
+
+var svg = d3.select("body").append("svg").attr("width",width).attr("height", height/16).attr("id","MedsTabs");
+
+var svg = d3.select("body").append("svg").attr("width",width).attr("height", height/4.8).attr("id","StaticInfoMeds");
+		d3.select("#StaticInfoMeds").append("rect")
+			.attr("x",5).attr("y",10)
+			.attr("width", width-10)
+			.attr("height", height/5.5 -15)
+			.attr("stroke","#a7a7a7" )
+			.attr("fill","#565555")
+			.attr("stroke-width",3)
+			.attr("id","frontrect");
+
+
+var medsdata = [{value: 'Meds', color: '#82A29E'},{value: 'Labs', color:'#717E91'},{value:'Imaging', color:'#A49183'},{value:'Actions', color:'#82A29E'},{value:'Notes', color:'#796782'}];
+
+var recttabs = d3.select("#MedsTabs").selectAll("rect").data(medsdata).enter().append("rect")
+			.attr("width", function(d,i){return width/5;})
+			.attr("height",height/16)
+			.attr("x",function(d,i){return i* width/5;})
+			.attr("y",10)
+			.attr("fill",function(d){return d.color;})
+			.attr("rx",14)
+			.attr("ry",14)
+			.attr("stroke","grey")
+			.attr("class", "MedsTabs")
+			.on("click", function(d){if (d.value == 'Notes'){if (noteson == '0'){; 
+				noteson = 1; 
+				d3.select("#StaticInfoMeds").append("rect")
+					.attr("x",5).attr("y",10)
+					.attr("width", width-10)
+					.attr("height", height/5.5 -15)
+					.attr("stroke","#a7a7a7" )
+					.attr("fill","#300e03")
+					.attr("stroke-width",3)
+					.attr("id","notesrect");
+		//		document.getElementById("addnotes").style.visibility = "visible";
+				
+				}
+			else {d3.select("#notesrect").remove(); 
+			document.getElementById("addnotes").style.visibility="hidden";
+			noteson = 0;
+
+			}
+			}});
+		
+		d3.select("#MedsTabs").selectAll("text").data(medsdata).enter()
+			.append("text")
+			.attr("x",function(d,i){return i*width/5 + 80 ;})
+			.attr("y",30)
+			.text(function (d) { return d.value ; })
+			.attr("font-size",width/70)
+			.attr("fill","#282828")
+			.attr("class", "MedsTabsdata");
+			
+//var svg = d3.select("body").append("svg").attr("width",width).attr("height", height/6).attr("id","currentPAP");
+/*var margin = {top: 0, right: 10, bottom: height/8, left: 3},
+    widthnew = width -width/15 - margin.left - margin.right,
+    heightnew = height/5 - margin.top - margin.bottom;
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width - margin.left)
+    .attr("height", height/6 + margin.top + margin.bottom)
+  	.append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+    .attr("id","currentPAP");
+*/
+
+//d3.select("#currentPAP").append("rect").attr("x", 0).attr("y",2).attr("width", width-10).attr("height",height/3 + 8).attr("fill","#3b3a3a").attr("stroke","white");
+
+var data2current = [{h:40, value: 12, unit:"PAP"},{h:40, value: 12, unit:"PAP"},{h:40, value: 12, unit:"PAP"},{h:40, value: 12, unit:"PAP"}];
+
+var currentcircles = d3.select("#currentPAP").selectAll("circle").data(data2current).enter().append("circle")
+					.attr("cx", function(d,i){return width/1.1;})
+					.attr("cy", function(d,i){return height/d.h ;})
+					.attr("r", width/50)
+					.attr("stroke", "#4F867F")
+					.attr("stroke-width",2)
+					.attr("fill","#282828")
+
+var medsboxes = d3.select("#currentPAP").selectAll("rect").data(data2current).enter().append("rect")
+					.attr("width", function(d,i){return width/12;})
+					.attr("height",height/19)
+					.attr("x", function(d,i){return width/1.22;})
+					.attr("y", function(d,i){return height/d.h - 16;})
+					.attr("rx",width/50)
+					.attr("ry",10)
+					.attr("stroke", "#4F867F")
+					.attr("stroke-width",2)
+					.attr("fill","#282828")
+					.on("click", function(d,i){d3.select("svg").append("text").attr("font-size", width/50).attr("y", y/8)
+												.attr("x", i* width/6).text(function(){return d;})});	
+
+
+var inter = setInterval(function() {
+                updateData();
+        }, 5000); 
+ function updateData(){
+ 	
+			var newNumber = getRandomInt(20, 40);
+			d3.select("#currentPAP").selectAll("text").remove();
+			d3.select("svg").append("text").text(newNumber).attr("fill","black").attr("font-size",20).attr("x",10).attr("y",(i+1)*20);
+		//	console.log(newNumber*100);
+d3.select("#currentPAP").append("text")
+					.text(newNumber*100)
+					.attr("font-size", width/70)
+					.attr("x", width/1.18)
+					.attr("fill","white")
+					.attr("y",20);
+				//	.attr("y",function(d){ return height/d.h +10 ;});
+
+}
+
+/*
+d3.select("body").append("svg").attr("id","graphs").attr("width",width/1.3).attr("height",900);
+ var svgnew = d3.select("#graphs"),
+            margin = {top: 0, right: 20, bottom: 815, left: 40},
+            margin2 = {top: 205, right: 20, bottom: 610, left:40},
+            margin3 = {top: 805, right: 0, bottom: 45, left: 40},// last chart. need to rename.
+            margin4 = {top: 605, right: 20, bottom: 410, left: 40},
+            margin5 = {top: 405, right: 20, bottom: 210, left:40},
+            widthnew = +svgnew.attr("width") - margin.left - 2*margin.right,
+            heightnew = +svgnew.attr("height") - margin.top - margin.bottom,
+            height2 = +svgnew.attr("height") - margin2.top - margin2.bottom,
+            height3 = +svgnew.attr("height") - margin3.top - margin3.bottom,
+            height4 = +svgnew.attr("height") - margin4.top - margin4.bottom,
+            height5 = +svgnew.attr("height") - margin5.top - margin5.bottom;
+
+
+
+     
+
+    function addMinutes(date, minutes){
+        return new Date(date.getTime() + minutes*60000);
+    }
+
+    var currentdate = new Date();
+  //  var formatTime = d3.timeFormat("%H%M");
+    var csv_test = "t, x, y1, y2, y3, y4\n";
+
+    function type(d) {
+
+        d.x = +d.x;
+        d.y1 = +d.y1;
+        d.y2 = +d.y2;
+        d.y3 = +d.y3;
+        d.y4 = +d.y4;
+        return d;
+    }
+
+    d3.csv("line.csv").row(function(d){
+           return{
+       //       t: parseDate(addMinutes(currentdate, 30)),
+              x: d.x,
+              y1: d.y1,
+              y2: d.y2,
+              y3: d.y3,
+              y4: d.y4
+           }
+    }).get(function(error, rows){
+        console.log(rows);
+    });
+
+
+     var x=d3.scaleTime().domain([new Date(2000, 0, 1), new Date(2000, 0, 2)])
+    					.range([0, 960]);
+
+
+     //var x = d3.scaleLinear().range([0, widthnew]),
+        var x2 = d3.scaleLinear().range([0, widthnew]),
+            x3 = d3.scaleLinear().range([0, widthnew]),
+            x4 = d3.scaleLinear().range([0, widthnew]),
+            x5 = d3.scaleLinear().range([0, widthnew]),
+            y = d3.scaleLinear().range([heightnew, 0]),
+            y2 = d3.scaleLinear().range([heightnew, 0]),
+            y3 = d3.scaleLinear().range([heightnew, 0]),
+            y4 = d3.scaleLinear().range([heightnew, 0]),
+            y5 = d3.scaleLinear().range([heightnew, 0]);
+
+ var xAxis = d3.axisBottom(x).ticks(5),
+            xAxis2 = d3.axisBottom(x2).ticks(5),
+            xAxis3 = d3.axisBottom(x3)
+            xAxis4 = d3.axisBottom(x4).ticks(5),
+            xAxis5 = d3.axisBottom(x5).ticks(5),
+            yAxis4 = d3.axisLeft(y4).ticks(5),
+            yAxis5 = d3.axisLeft(y5).ticks(5),
+            yAxis = d3.axisLeft(y).ticks(5);
+            yAxis2 = d3.axisLeft(y2).ticks(5);
+            yAxis3 = d3.axisLeft(y3)
+
+
+    var brush = d3.brushX()
+    		.extent([[0, 0], [widthnew, height3]])
+            .on("brush end", brushed);
+
+    var zoom = d3.zoom()
+            .scaleExtent([1, Infinity])
+            .translateExtent([[0, 0], [widthnew, heightnew]])
+            .extent([[0, 0], [widthnew, heightnew]])
+            .on("zoom", zoomed);
+    //var zoom2
+
+    var area = d3.area()
+            .curve(d3.curveMonotoneX)
+            .x(function(d) { return x(d.x); })
+            .y0(heightnew)
+            .y1(function(d) { return y(d.y1); });
+
+    var area2 = d3.area()
+            .curve(d3.curveMonotoneX)
+            .x(function(d) { return x2(d.x); })
+            .y0(height2)
+            .y1(function(d) { return y2(d.y2); });
+
+    var area3 = d3.area()
+            .curve(d3.curveMonotoneX)
+            .x(function(d) { return x3(d.x); })
+            .y0(height3)
+            .y1(function(d) { return y3(d.y1); });
+
+    var area4 = d3.area()
+            .curve(d3.curveMonotoneX)
+            .x(function(d) { return x4(d.x); })
+            .y0(height4)
+            .y1(function(d) { return y4(d.y3); });
+
+    var area5 = d3.area()
+            .curve(d3.curveMonotoneX)
+            .x(function(d) { return x5(d.x); })
+            .y0(height5)
+            .y1(function(d) { return y5(d.y4); });
+
+    svgnew.append("defs").append("clipPath")
+            .attr("id", "clip")
+            .append("rect")
+            .attr("width", widthnew)
+            .attr("height", heightnew);
+
+    var focus = svgnew.append("g")
+            .attr("class", "focus")
+            .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    var focus2 = svgnew.append("g")
+            .attr("class","focus2")
+            .attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+    var focus4 = svgnew.append("g")
+            .attr("class","focus4")
+            .attr("transform", "translate(" + margin4.left + "," + margin4.top + ")");
+
+    var focus5 = svgnew.append("g")
+            .attr("class","focus5")
+            .attr("transform", "translate(" + margin5.left + "," + margin5.top + ")");
+
+    var context = svgnew.append("g")
+            .attr("class", "context")
+            .attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
+
+    //9svgnew.selectAll("g").style({ 'stroke' : '#307C6B'});
+
+    d3.csv("line.csv", type, function(error, data) {
+        if (error) throw error;
+
+        console.log("The max of y3 is " + d3.max(data, function(d) { return d.y3; }) );
+        x.domain(d3.extent(data, function(d) { return d.x; }));
+        y.domain([0, d3.max(data, function(d) { return d.y1; })]);
+        x2.domain(d3.extent(data, function(d) { return d.x; }));
+        y2.domain(d3.extent(data, function(d) { return d.y2; }));
+        x4.domain(d3.extent(data, function(d) { return d.x; }));
+        y4.domain(d3.extent(data, function(d) { return d.y3; }));
+        x5.domain(d3.extent(data, function(d) { return d.x; }));
+        y5.domain(d3.extent(data, function(d) { return d.y4; }));
+        x3.domain(x.domain());
+        y3.domain(y.domain());
+
+        
+    
+
+    	focus.append("line")
+    		.attr("x1",0)
+    		.attr("x2",widthnew)
+    		.attr("y1",60)
+    		.attr("y2",60)
+    		.attr("stroke-width",heightnew/2)
+    		.attr("stroke","#5F6A6A");
+
+		focus2.append("line")
+    		.attr("x1",0)
+    		.attr("x2",widthnew)
+    		.attr("y1",50)
+    		.attr("y2",50)
+    		.attr("stroke-width",heightnew/1.3)
+    		.attr("stroke","#5F6A6A");
+
+		focus4.append("line")
+    		.attr("x1",0)
+    		.attr("x2",widthnew)
+    		.attr("y1",51)
+    		.attr("y2",51)
+    		.attr("stroke-width",heightnew/1.25)
+    		.attr("stroke","#5F6A6A");
+
+		focus5.append("line")
+    		.attr("x1",0)
+    		.attr("x2",widthnew)
+    		.attr("y1",65)
+    		.attr("y2",65)
+    		.attr("stroke-width",heightnew/1.9)
+    		.attr("stroke","#5F6A6A");	    		    		
+
+        focus.append("path")
+                .datum(data)
+                .attr("class", "area")
+                .attr("stroke","#68D3BC")
+                .attr("stroke-width",1.5)
+                .attr("d", area);
+		
+		
+
+        focus.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + heightnew + ")")
+                .call(xAxis);
+
+        focus.append("g")
+                .attr("class", "axis axis--y")
+                .call(yAxis);
+
+        focus2.append("path")
+                .datum(data)
+               	.attr("class","area")
+               	.attr("stroke","#68D3BC")
+                .attr("stroke-width",1.5)
+                .attr("d",area2);
+
+		function pathTween() {
+		        var interpolate = d3.scale.quantile()
+		                	.domain([0,1])
+		                	.range(d3.range(1, data.length + 1));
+		        
+		        return function(t) {
+		        return line(data.slice(0, interpolate(t)));
+		        
+		        };
+		    }
+        focus2.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + height2 + ")")
+                .call(xAxis2);
+
+        focus2.append("g")
+                .attr("class", "axis axis--y")
+                .call(yAxis);
+
+
+        focus4.append("path")
+                .datum(data)
+                .attr("class","area")
+                 .attr("stroke","#68D3BC")
+                .attr("stroke-width",1.5)
+                .attr("d",area4);
+
+        focus4.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + height4 + ")")
+                .call(xAxis4);
+
+        focus4.append("g")
+                .attr("class", "axis axis--y")
+                .call(yAxis4);
+
+        focus5.append("path")
+                .datum(data)
+                .attr("class","area")
+                 .attr("stroke","#68D3BC")
+                .attr("stroke-width",1.5)
+                .attr("d",area5);
+
+        focus5.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + height5 + ")")
+                .call(xAxis5);
+
+        focus5.append("g")
+                .attr("class", "axis axis--y")
+                .call(yAxis5);
+
+        context.append("path")
+                .datum(data)
+                .attr("class", "area")
+                 .attr("stroke","#68D3BC")
+                .attr("stroke-width",1.5)
+                .attr("d", area3);
+
+        context.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + height3 + ")")
+                .call(xAxis3);
+
+        context.append("g")
+                .attr("class", "brush")
+                .attr("id","brush")
+                .call(brush)
+                .call(brush.move, x.range());
+
+
+        svgnew.append("rect")
+                .attr("class", "zoom")
+                .attr("width", widthnew)
+                .attr("height", heightnew)
+                .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                .call(zoom)
+                .attr("id","brusher");
+
+		var inter = setInterval(function() {
+                updatebrusher();
+        }, 5000);                 
+
+    });
+	
+	var max = 947;
+	var min = 0; 
+	var brushStart = 0, brushEnd = 250 ; 
+
+	function updatebrusher(){
+
+			context.select(".brush").call(brush.move, [brushStart, brushEnd]);
+			
+			if(brushEnd<947){
+				brushStart += 10;
+				brushEnd +=10;
+			}else{
+				brushStart = 0;
+				brushEnd = 20;
+			}
+				
+        	console.log("max value is " + x.range());
+        }
+
+    function brushed() {
+        if (d3.event.sourceEvent && d3.event.sourceEvent.type === "zoom") return; // ignore brush-by-zoom
+        var s = d3.event.selection || x3.range();
+        x.domain(s.map(x3.invert, x3));
+        x2.domain(s.map(x3.invert, x3));
+        x4.domain(s.map(x3.invert, x3));
+        x5.domain(s.map(x3.invert, x3));
+
+        focus.select(".area").attr("d", area);
+        focus.select(".axis--x").call(xAxis);
+        focus2.select(".area").attr("d", area2);
+        focus2.select(".axis--x").call(xAxis2);
+        focus4.select(".area").attr("d", area4);
+        focus4.select(".axis--x").call(xAxis4);
+        focus5.select(".area").attr("d", area5);
+        focus5.select(".axis--x").call(xAxis5);
+
+        svgnew.select(".zoom").call(zoom.transform, d3.zoomIdentity
+                .scale(width / (s[1] - s[0]))
+                .translate(-s[0], 0));
+    }
+
+    function zoomed() {
+        if (d3.event.sourceEvent && d3.event.sourceEvent.type === "brush") return; // ignore zoom-by-brush
+        var t = d3.event.transform;
+        x.domain(t.rescaleX(x3).domain());
+        x2.domain(t.rescaleX(x3).domain());
+        x4.domain(t.rescaleX(x3).domain());
+        x5.domain(t.rescaleX(x3).domain());
+
+        focus.select(".area").attr("d", area);
+        focus.select(".axis--x").call(xAxis);
+        focus2.select(".area").attr("d", area2);
+        focus2.select(".axis--x").call(xAxis2);
+
+        focus4.select(".area").attr("d", area4);
+        focus4.select(".axis--x").call(xAxis4);
+        focus5.select(".area").attr("d", area5);
+        focus5.select(".axis--x").call(xAxis5);
+
+        context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
+    }
+
+    */
+
+d3.select("body").append("svg").attr("id","firstgraph").attr("width",width/1.2).attr("height",900);
+
+var nfirst = 60,
+    randomfirst = d3.randomNormal(0, .45),
+    datafirst = d3.range(nfirst).map(randomfirst);
+
+
+var svgline = d3.select("#firstgraph"),
+    margin1 = {top: 10, right: 20, bottom: 690, left: 40},
+    widthfirstline = +svgline.attr("width") - margin1.left - margin1.right,
+    heightfirstline = +svgline.attr("height") - margin1.top - margin1.bottom,
+    g = svgline.append("g").attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");
+
+var xfirst = d3.scaleLinear()
+    .domain([0, nfirst - 1])
+    .range([0, widthfirstline]);
+
+var yfirst = d3.scaleLinear()
+    .domain([-1, 1])
+    .range([heightfirstline, 0]);
+
+var firstline = d3.line()
+    .x(function(d, i) { return xfirst(i); })
+    .y(function(d, i) { return yfirst(d); });
+
+g.append("rect")
+	.attr("width",widthfirstline)
+	.attr("height",30)
+	.attr("x",0)
+	.attr("y",0)
+	.attr("fill","#661616")
+	.attr("opacity",0.4);
+
+g.append("rect")
+	.attr("width",widthfirstline)
+	.attr("height",heightfirstline -30)
+	.attr("x",0)
+	.attr("y",30)
+	.attr("fill","#5F5A5A")
+	.attr("opacity",0.4);
+
+
+g.append("defs").append("clipPath")
+    .attr("id", "clip")
+  	.append("rect")
+  	.attr("width", widthfirstline)
+    .attr("height", heightfirstline)
+    .on("mouseover", function(){console.log("sneha");});
+
+g.append("g")
+    .attr("class", "axis axis--x")
+    .attr("fill","black")
+   	.attr("transform", "translate(0," + yfirst(0) + ")")
+    .call(d3.axisBottom(xfirst));
+
+g.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(yfirst));
+
+g.append("line")
+	.style("stroke-dasharray", ("10,3")) // make the stroke dashed
+    .style("stroke", "red") 
+    .attr("x1",0)
+    .attr("x2",widthfirstline)
+    .attr("y1",30)
+    .attr("y2",30);  
+
+var path = g.append("g")
+  .attr("clip-path", "url(#clip)")
+  .append("path")
+  .datum(datafirst)
+  .attr("class", "line")
+  .transition()
+  .duration(2000)
+  .ease(d3.easeLinear)
+  .on("start", tick);
+
+console.log(datafirst);
+
+function tick() {
+
+  // Push a new data point onto the back.
+  generateddata = datafirst.push(randomfirst());
+  console.log(generateddata);
+  // Redraw the line.
+  d3.select(this)
+      .attr("d", firstline)
+      .attr("transform", null);
+
+  // Slide it to the left.
+  d3.active(this)
+    .attr("transform", "translate(" + xfirst(-1) + ",0)")
+    .transition()
+    .on("start", tick);
+
+  // Pop the old data point off the front.
+  datafirst.shift();
+
+}
+
+var nsecond = 60,
+    randomsecond = d3.randomNormal(0, .45),
+    datasecond = d3.range(nsecond).map(randomsecond);
+
+
+var svgline = d3.select("#firstgraph"),
+    margin2 = {top: 230, right: 20, bottom: 470, left: 40},
+    widthsecondline = +svgline.attr("width") - margin2.left - margin2.right,
+    heightsecondline = +svgline.attr("height") - margin2.top - margin2.bottom,
+    g = svgline.append("g").attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
+
+var xsecond = d3.scaleLinear()
+    .domain([0, nsecond - 1])
+    .range([0, widthsecondline]);
+
+var ysecond = d3.scaleLinear()
+    .domain([-1, 1])
+    .range([heightsecondline, 0]);
+
+var secondline = d3.line()
+    .x(function(d, i) { return xsecond(i); })
+    .y(function(d, i) { return ysecond(d); });
+
+g.append("rect")
+	.attr("width",widthsecondline)
+	.attr("height",30)
+	.attr("x",0)
+	.attr("y",0)
+	.attr("fill","#661616")
+	.attr("opacity",0.4);
+
+g.append("rect")
+	.attr("width",widthsecondline)
+	.attr("height",heightsecondline -30)
+	.attr("x",0)
+	.attr("y",30)
+	.attr("fill","#5F5A5A")
+	.attr("opacity",0.4);
+
+
+g.append("defs").append("clipPath")
+    .attr("id", "clip")
+  	.append("rect")
+  	.attr("width", widthsecondline)
+    .attr("height", heightsecondline);
+   
+
+g.append("g")
+    .attr("class", "axis axis--x")
+    .attr("fill","black")
+   	.attr("transform", "translate(0," + ysecond(0) + ")")
+    .call(d3.axisBottom(xsecond));
+
+g.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(ysecond));
+
+g.append("line")
+	.style("stroke-dasharray", ("10,3")) // make the stroke dashed
+    .style("stroke", "red") 
+    .attr("x1",0)
+    .attr("x2",widthsecondline)
+    .attr("y1",30)
+    .attr("y2",30);  
+
+var path = g.append("g")
+  .attr("clip-path", "url(#clip)")
+  .append("path")
+  .datum(datasecond)
+  .attr("class", "line")
+  .transition()
+  .duration(2000)
+  .ease(d3.easeLinear)
+  .on("start", tick);
+
+
+
+console.log(datafirst);
+
+function tick() {
+
+  // Push a new data point onto the back.
+  generateddata = datasecond.push(randomsecond());
+  console.log(generateddata);
+  // Redraw the line.
+  d3.select(this)
+      .attr("d", secondline)
+      .attr("transform", null);
+
+  // Slide it to the left.
+  d3.active(this)
+    .attr("transform", "translate(" + xsecond(-1) + ",0)")
+    .transition()
+    .on("start", tick);
+
+  // Pop the old data point off the front.
+  datasecond.shift();
+
+}
+
+var nthird = 60,
+    randomthird = d3.randomNormal(0, .45),
+    datathird = d3.range(nthird).map(randomthird);
+
+
+var svgline = d3.select("#firstgraph"),
+    margin3 = {top: 460, right: 20, bottom: 240, left: 40},
+    widththirdline = +svgline.attr("width") - margin3.left - margin3.right,
+    heightthirdline = +svgline.attr("height") - margin3.top - margin3.bottom,
+    g = svgline.append("g").attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
+
+var xthird = d3.scaleLinear()
+    .domain([0, nthird - 1])
+    .range([0, widththirdline]);
+
+var ythird = d3.scaleLinear()
+    .domain([-1, 1])
+    .range([heightthirdline, 0]);
+
+var thirdline = d3.line()
+    .x(function(d, i) { return xthird(i); })
+    .y(function(d, i) { return ythird(d); });
+
+g.append("rect")
+	.attr("width",widththirdline)
+	.attr("height",30)
+	.attr("x",0)
+	.attr("y",0)
+	.attr("fill","#661616")
+	.attr("opacity",0.4);
+
+g.append("rect")
+	.attr("width",widththirdline)
+	.attr("height",heightthirdline -30)
+	.attr("x",0)
+	.attr("y",30)
+	.attr("fill","#5F5A5A")
+	.attr("opacity",0.4);
+
+
+g.append("defs").append("clipPath")
+    .attr("id", "clip")
+  	.append("rect")
+  	.attr("width", widththirdline)
+    .attr("height", heightthirdline);
+   
+
+g.append("g")
+    .attr("class", "axis axis--x")
+    .attr("fill","black")
+   	.attr("transform", "translate(0," + ysecond(0) + ")")
+    .call(d3.axisBottom(xsecond));
+
+g.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(ythird));
+
+g.append("line")
+	.style("stroke-dasharray", ("10,3")) // make the stroke dashed
+    .style("stroke", "red") 
+    .attr("x1",0)
+    .attr("x2",widththirdline)
+    .attr("y1",30)
+    .attr("y2",30);  
+
+var path = g.append("g")
+  .attr("clip-path", "url(#clip)")
+  .append("path")
+  .datum(datathird)
+  .attr("class", "line")
+  .transition()
+  .duration(2000)
+  .ease(d3.easeLinear)
+  .on("start", tick);
+
+
+
+console.log(datathird);
+
+function tick() {
+
+  // Push a new data point onto the back.
+  generateddata = datathird.push(randomthird());
+  console.log(generateddata);
+  // Redraw the line.
+  d3.select(this)
+      .attr("d", thirdline)
+      .attr("transform", null);
+
+  // Slide it to the left.
+  d3.active(this)
+    .attr("transform", "translate(" + xthird(-1) + ",0)")
+    .transition()
+    .on("start", tick);
+
+  // Pop the old data point off the front.
+  datathird.shift();
+
+}   
+var nfourth = 60,
+    randomfourth = d3.randomNormal(0, .45),
+    datafourth = d3.range(nfourth).map(randomfourth);
+
+
+var svgline = d3.select("#firstgraph"),
+    margin4 = {top: 670, right: 20, bottom: 30, left: 40},
+    widthfourthline = +svgline.attr("width") - margin4.left - margin4.right,
+    heightfourthline = +svgline.attr("height") - margin4.top - margin4.bottom,
+    g = svgline.append("g").attr("transform", "translate(" + margin4.left + "," + margin4.top + ")");
+
+var xfourth = d3.scaleLinear()
+    .domain([0, nfourth - 1])
+    .range([0, widthfourthline]);
+
+var yfourth = d3.scaleLinear()
+    .domain([-1, 1])
+    .range([heightfourthline, 0]);
+
+var fourthline = d3.line()
+    .x(function(d, i) { return xfourth(i); })
+    .y(function(d, i) { return yfourth(d); });
+
+g.append("rect")
+	.attr("width",widthfourthline)
+	.attr("height",30)
+	.attr("x",0)
+	.attr("y",0)
+	.attr("fill","#661616")
+	.attr("opacity",0.4);
+
+g.append("rect")
+	.attr("width",widthfourthline)
+	.attr("height",heightfourthline -30)
+	.attr("x",0)
+	.attr("y",30)
+	.attr("fill","#5F5A5A")
+	.attr("opacity",0.4);
+
+
+g.append("defs").append("clipPath")
+    .attr("id", "clip")
+  	.append("rect")
+  	.attr("width", widthfourthline)
+    .attr("height", heightfourthline);
+   
+
+g.append("g")
+    .attr("class", "axis axis--x")
+    .attr("fill","black")
+   	.attr("transform", "translate(0," + ysecond(0) + ")")
+    .call(d3.axisBottom(xfourth));
+
+g.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(yfourth));
+
+g.append("line")
+	.style("stroke-dasharray", ("10,3")) // make the stroke dashed
+    .style("stroke", "red") 
+    .attr("x1",0)
+    .attr("x2",widthfourthline)
+    .attr("y1",30)
+    .attr("y2",30);  
+
+var path = g.append("g")
+  .attr("clip-path", "url(#clip)")
+  .append("path")
+  .datum(datafourth)
+  .attr("class", "line")
+  .transition()
+  .duration(2000)
+  .ease(d3.easeLinear)
+  .on("start", tick);
+
+
+
+console.log(datafourth);
+
+function tick() {
+
+  // Push a new data point onto the back.
+  generateddata = datafourth.push(randomfourth());
+  console.log(generateddata);
+  // Redraw the line.
+  d3.select(this)
+      .attr("d", fourthline)
+      .attr("transform", null);
+
+  // Slide it to the left.
+  d3.active(this)
+    .attr("transform", "translate(" + xfourth(-1) + ",0)")
+    .transition()
+    .on("start", tick);
+
+  // Pop the old data point off the front.
+  datafourth.shift();
+
+}   
+
+/*var n = 20,
+    random = d3.randomNormal(0, .2),
+    datasecond = d3.range(n).map(random);
+
+var svgline = d3.select("#secondgraph"),
+    margin = {top: 20, right: 20, bottom: 20, left: 40},
+    widthsecondline = +svgline.attr("width") - margin.left - margin.right,
+    heightsecondline = +svgline.attr("height") - margin.top - margin.bottom,
+    g = svgline.append("g").attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+var xsecond = d3.scaleLinear()
+    .domain([0, n - 1])
+    .range([0, widthsecondline]);
+
+var ysecond = d3.scaleLinear()
+    .domain([-1, 1])
+    .range([heightsecondline, 0]);
+
+var secondline = d3.line()
+    .x(function(d, i) { return xsecond(i); })
+    .y(function(d, i) { return ysecond(d); });
+
+g.append("defs").append("clipPath")
+    .attr("id", "clip")
+  	.append("rect")
+  	.attr("width", widthsecondline)
+    .attr("height", heightsecondline);
+
+g.append("g")
+    .attr("class", "axis axis--x")
+    .attr("fill","grey")
+   	.attr("transform", "translate(0," + ysecond(0) + ")")
+    .call(d3.axisBottom(xsecond));
+
+g.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(ysecond));
+
+g.append("g")
+  .attr("clip-path", "url(#clip)")
+  .append("path")
+  .datum(datasecond)
+  .attr("class", "line")
+  .transition()
+  .duration(1000)
+  .ease(d3.easeLinear)
+  .on("start", tick);
+
+function tick() {
+
+  // Push a new data point onto the back.
+  datasecond.push(random());
+
+  // Redraw the line.
+  d3.select(this)
+      .attr("d", secondline)
+      .attr("transform", null);
+
+  // Slide it to the left.
+  d3.active(this)
+    .attr("transform", "translate(" + xsecond(-1) + ",0)")
+    .transition()
+    .on("start", tick);
+
+  // Pop the old data point off the front.
+  datasecond.shift();
+
+}
+
+*/
+
+
+d3.select("body").append("svg").attr("id","currentreadings").attr("width",width/6.6).attr("height",900);
+
+var medsboxes = d3.select("#currentreadings").append("rect")
+					.attr("width", width/11)
+					.attr("height",height/17)
+					.attr("x", width/30)
+					.attr("y", height/8)
+					.attr("stroke", "#3D3737")
+					.attr("stroke-width",2)
+				//	.attr("class","current")
+					.attr("fill","#4F867F");
+
+d3.select("#currentreadings").append("text")
+								.text("56")
+								.attr("fill","white")
+								.attr("font-size",width/23)
+								.attr("x",width/20)
+								.attr("y", height/8.5)
+								.attr("id","PAP")
+								.attr("font-weight","bold");
+
+d3.select("#currentreadings").append("text")
+								.text("PAP")
+								.attr("fill","white")
+								.attr("font-size",width/40)
+								.attr("x",width/21)
+								.attr("y",height/5.5)
+								.attr("font-weight","bold");								
+
+var inter = setInterval(function() {
+                updateData();
+        }, 5000); 
+
+function getRandomInt(min, max){
+	return Math.round(Math.random() * (max - min)) + min;
+}
+ function updateData(){
+ 		
+			var newNumber = getRandomInt(50,90);
+			d3.select("#currentreadings").selectAll("#PAP").remove();
+			d3.select("#currentreadings").append("text").text(newNumber)
+			.attr("fill", function(){if(newNumber <70) return 'white'; else return '#EA7A1E';})
+			.attr("font-size",width/23)
+			.attr("x",width/20)
+			.attr("y",height/8.5)
+			.attr("id","PAP")
+			.attr("font-weight","bold");
+			
+	
+}
+var medsboxes = d3.select("#currentreadings").append("rect")
+					.attr("width", width/11)
+					.attr("height",height/17)
+					.attr("x", width/30)
+					.attr("y", height/1.9)
+					.attr("stroke", "#3D3737")
+					.attr("stroke-width",2)
+					.attr("fill","#4F867F");
+
+d3.select("#currentreadings").append("text")
+								.text("67")
+								.attr("fill","white")
+								.attr("font-size",width/23)
+								.attr("x",width/20)
+								.attr("y", height/1.93)
+								.attr("id","SVO2")
+								.attr("font-weight","bold");
+
+d3.select("#currentreadings").append("text")
+								.text("SVO2")
+								.attr("fill","white")
+								.attr("font-size",width/40)
+								.attr("x",width/21)
+								.attr("y", height/1.74)
+								.attr("font-weight","bold");								
+
+var inter = setInterval(function() {
+                updateDataSVO2();
+        }, 3000); 
+ function updateDataSVO2(){
+ 		
+			var newNumberSVO2 = getRandomInt(60,80);;
+			
+			d3.select("#currentreadings").selectAll("#SVO2").remove();
+			
+			d3.select("#currentreadings").append("text")
+								.text(newNumberSVO2)
+								.attr("fill",function(){if(newNumberSVO2>70) return '#EA7A1E'; else return 'white';})
+								.attr("font-size",width/23)
+								.attr("x",width/20)
+								.attr("y", height/1.93)
+								.attr("id","SVO2")
+								.attr("font-weight","bold");
+			
+	
+}
+var medsboxes = d3.select("#currentreadings").append("rect")
+					.attr("width", width/11)
+					.attr("height",height/17)
+					.attr("x", width/30)
+					.attr("y", height/1.1)
+					.attr("stroke", "#3D3737")
+					.attr("stroke-width",2)
+				//	.attr("class","current")
+					.attr("fill","#4F867F");
+
+d3.select("#currentreadings").append("text")
+								.text("77")
+								.attr("fill","white")
+								.attr("font-size",width/23)
+								.attr("x",width/20)
+								.attr("y", height/1.1)
+								.attr("id","HR")
+								.attr("font-weight","bold");
+
+d3.select("#currentreadings").append("text")
+								.text("HR")
+								.attr("fill","white")
+								.attr("font-size",width/40)
+								.attr("x",width/21)
+								.attr("y", height/1.04)
+								.attr("font-weight","bold");								
+
+var inter = setInterval(function() {
+                updateDataHR();
+        }, 3000); 
+ function updateDataHR(){
+ 		
+			var newNumberHR = getRandomInt(20,70);
+			d3.select("#currentreadings").selectAll("#HR").remove();
+			d3.select("#currentreadings").append("text").text(newNumberHR)
+			.attr("fill", function(){if(newNumberHR <50) return 'white'; else return '#EA7A1E';})
+			.attr("font-size",width/23)
+			.attr("x",width/20)
+			.attr("y",height/1.1)
+			.attr("id","HR")
+			.attr("font-weight","bold");
+			
+	
+}
+
+var medsboxes = d3.select("#currentreadings").append("rect")
+					.attr("width", width/11)
+					.attr("height",height/17)
+					.attr("x", width/30)
+					.attr("y", height + height/5)
+					.attr("stroke", "#3D3737")
+					.attr("stroke-width",2)
+				//	.attr("class","current")
+					.attr("fill","#4F867F");
+
+
+d3.select("#currentreadings").append("text")
+								.text("34")
+								.attr("fill","white")
+								.attr("font-size",width/23)
+								.attr("font-weight",'bold')
+								.attr("x",width/20)
+								.attr("y", height + height/5)
+								.attr("id","BPM");
+
+d3.select("#currentreadings").append("text")
+								.text("BPM")
+								.attr("fill","white")
+								.attr("font-size",width/40)
+								.attr("font-weight",'bold')
+								.attr("x",width/21)
+								.attr("y", height + height/4.05);
+																
+
+var interBPM = setInterval(function() {
+                updateDataBPM();
+        }, 3000); 
+ function updateDataBPM(){
+ 		
+			var newNumberBPM = getRandomInt(20,80);
+			d3.select("#currentreadings").selectAll("#BPM").remove();
+			d3.select("#currentreadings").append("text").text(newNumberBPM).attr("fill", function(){if(newNumberBPM <60) return 'white'; else return '#EA7A1E';})
+			.attr("font-size",width/23).attr("x",width/20).attr("y",height + height/5)
+			.attr("id","BPM")
+			.attr("font-weight","bold");
+			
+	
+}
+})
+
+
+
+</script>
+
+<!--<nav>
+      <ul>
+        <li><a>Meds</a></li>
+        <li ><a>Labs</a></li>
+        <li><a>Imaging</a></li>
+        <li><a>Actions</a></li>
+        <li><a>Notes</a></li>
+      </ul>
+    </nav>
+   
+    </div>
+
+  <script>
+
+
+
+    // handle click animation for the tabs.
+    $("a").click(function(e){
+      e.preventDefault();
+    });
+
+    $("nav li").click(function(e){
+      $("nav li").removeClass("active");
+      $(this).addClass("active");
+    });
+
+
+   	x = w.innerWidth || e.clientWidth || g.clientWidth ,
+	y = w.innerHeight|| e.clientHeight|| g.clientHeight ;
+
+     li_count = $('a').length;
+     div_size = $(document).width();
+     //new_li_font_size = ( div_size/10)/li_count+'px';
+     new_li_width = (div_size)/li_count+'px';
+     //$('nav li').css('font-size', new_li_font_size);
+     $('a').css('width', new_li_width);
+
+-->
+</body>
+</html>
