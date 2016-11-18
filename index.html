@@ -7,6 +7,35 @@
 body{
 	font-family: "Helvetica", Sans-Serif; 
 }
+#underlay {
+  -webkit-filter: blur(4px);
+  -moz-filter: blur(4px);
+  -ms-filter: blur(4px);
+  -o-filter: blur(4px);
+  filter: blur(4px);
+}
+
+#underlay path,
+#underlay circle {
+  fill: none;
+}
+
+#underlay .lit {
+  fill: #0e0;
+  stroke: #0e0;
+}
+
+#overlay path,
+#overlay circle {
+  fill: #222;
+  stroke: #5f0;
+  stroke-opacity: 0;
+}
+
+#overlay .lit {
+  fill: #0e0;
+  stroke-opacity: 1;
+}
 .hover1:hover{
 	fill: #B6BCD2;
 	stroke: white;
@@ -349,13 +378,13 @@ var svg = d3.select("body").append("svg").attr("width",width).attr("height", hei
 			.attr("stroke-width",4)
 			.attr("fill","#8A8C8C");
 
-var svg = d3.select("body").append("svg").attr("width",width).attr("height", height/16).attr("id","MedsTabs");
+var svg = d3.select("body").append("svg").attr("width",width).attr("height", height/18).attr("id","MedsTabs");
 
 var svg = d3.select("body").append("svg").attr("width",width).attr("height", height/4.8).attr("id","StaticInfoMeds");
 		d3.select("#StaticInfoMeds").append("rect")
-			.attr("x",5).attr("y",10)
+			.attr("x",5).attr("y",2)
 			.attr("width", width-10)
-			.attr("height", height/5.5 -15)
+			.attr("height", height/5.5)
 			.attr("stroke","#a7a7a7" )
 			.attr("fill","#565555")
 			.attr("stroke-width",3)
@@ -366,7 +395,7 @@ var medsdata = [{value: 'Meds', color: '#82A29E'},{value: 'Labs', color:'#717E91
 
 var recttabs = d3.select("#MedsTabs").selectAll("rect").data(medsdata).enter().append("rect")
 			.attr("width", function(d,i){return width/5;})
-			.attr("height",height/16)
+			.attr("height",height/18)
 			.attr("x",function(d,i){return i* width/5;})
 			.attr("y",10)
 			.attr("fill",function(d){return d.color;})
@@ -379,7 +408,7 @@ var recttabs = d3.select("#MedsTabs").selectAll("rect").data(medsdata).enter().a
 				
 
 d3.select("#StaticInfoMeds").append("rect")
-					.attr("x",5).attr("y",10)
+					.attr("x",5).attr("y",0)
 					.attr("width", width-10)
 					.attr("height", height/5.5 -15)
 					.attr("stroke","#a7a7a7" )
@@ -508,9 +537,9 @@ var svgfirstline = d3.select("#firstgraph"),
         x2.domain(xfirst.domain());
     //    y2.domain(y.domain());
 focusfirst.append("rect").attr("width",widthfirstline - 10)
-					.attr("height",82)
+					.attr("height",53)
 					.attr("fill","#629184")
-					.attr("y",30)
+					.attr("y",23)
 					.attr("x",0);            
 
     
@@ -1128,7 +1157,7 @@ var svgfourthline = d3.select("#firstgraph"),
     margin4 = {top: 600, right: 20, bottom: 320, left: 40},
     widthfourthline = +svgfourthline.attr("width") - margin4.left - margin4.right,
     heightfourthline = +svgfourthline.attr("height") - margin4.top - margin4.bottom,
-    marginbrush = {top: 820, right: 50, bottom: 250, left: 50},
+    marginbrush = {top: 820, right: 50, bottom: 270, left: 50},
     heightbrush = +svgfourthline.attr("height") - marginbrush.top - marginbrush.bottom,
 
     fourthg = svgfourthline.append("g").attr("transform", "translate(" + margin4.left + "," + margin4.top + ")");
@@ -1267,8 +1296,11 @@ var svgfourthline = d3.select("#firstgraph"),
         context.append("g")
                 .attr("class", "brush")
                 .call(brush)
+                .style("fill","#F1A127")
                 .call(brush.move, x.range());
 
+        
+        
         function redrawWithoutAnimation() {
 
 
@@ -1429,7 +1461,7 @@ function mouseout() {
 				.attr("cx",function (d,i) {return xthird(i);})
 				.attr("cy",function (d) {return ythird(d.y3);})
 				.attr("r", 4.5);
-		focussecond.select(".axis--x").call(xAxisThird);
+		focusthird.select(".axis--x").call(xAxisThird);
 
 
 		svgthirdline.select(".zoom").call(zoom.transform, d3.zoomIdentity
@@ -1487,7 +1519,7 @@ function mouseout() {
 				.attr("cx",function (d,i) {return xthird(i);})
 				.attr("cy",function (d) {return ythird(d.y3);})
 				.attr("r", 4.5);
-		focussecond.select(".axis--x").call(xAxisThird);
+		focusthird.select(".axis--x").call(xAxisThird);
 
 
 		context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
@@ -1688,6 +1720,26 @@ var interBPM = setInterval(function() {
 			.attr("font-weight","bold");
 			
 	
+}
+
+var currenttime = setInterval(function(){
+  updatetime();
+}, 1000);
+
+function updatetime(){
+var now = new Date,
+      hours = now.getHours(),
+      minutes = now.getMinutes(),
+      seconds = now.getSeconds();
+d3.selectAll("#time").remove();
+d3.select("#currentreadings").append("text")
+                .text(hours + ":" + minutes + ":" + seconds)
+                .attr("fill","white")
+                .attr("font-size",width/40)
+                .attr("x",width/24)
+                .attr("id","time")
+                .attr("y", 845);
+
 }
 })
 </script>
