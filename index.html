@@ -243,6 +243,7 @@ rect.pane {
 
 .menu ul{
   display: flex;
+   display: inline-flex;
   list-style: none;
   padding: 0;
   justify-content: center;
@@ -550,7 +551,7 @@ focusfirst.append("rect").attr("width",widthfirstline - 10)
         .attr("y1", j)
         .attr("x2", widthfirstline - 10)
         .attr("y2", j)
-        .style("stroke", "grey")
+        .style("stroke", "#463F3F")
         .style("stroke-dasharray", "4,4")
         .style("stroke-width", 2);            
 };					
@@ -561,7 +562,7 @@ focusfirst.append("rect").attr("width",widthfirstline - 10)
         .attr("x2", j)
         .attr("y2", heightfirstline)
         .style("stroke", "grey")
-        .style("stroke-width", 2);            
+        .style("stroke-width", 1.5);            
 };    
         focusfirst.append("path")
                 .data([data])
@@ -778,7 +779,7 @@ var svgsecondline = d3.select("#firstgraph"),
 		        .attr("y1", j)
 		        .attr("x2", widthsecondline - 10)
 		        .attr("y2", j)
-		        .style("stroke", "grey")
+		        .style("stroke", "#463F3F")
 		        .style("stroke-dasharray", "4,4")
 		        .style("stroke-width", 2);            
 };					
@@ -789,7 +790,7 @@ var svgsecondline = d3.select("#firstgraph"),
 	        .attr("x2", j)
 	        .attr("y2", heightsecondline)
 	        .style("stroke", "grey")
-	        .style("stroke-width", 2);            
+	        .style("stroke-width", 1.5);            
 };   
 
         
@@ -1005,7 +1006,7 @@ var svgthirdline = d3.select("#firstgraph"),
 			        .attr("y1", j)
 			        .attr("x2", widththirdline - 10)
 			        .attr("y2", j)
-			        .style("stroke", "grey")
+			        .style("stroke", "#463F3F")
 			        .style("stroke-dasharray", "4,4")
 			        .style("stroke-width", 2);            
 			};					
@@ -1016,7 +1017,7 @@ var svgthirdline = d3.select("#firstgraph"),
 			        .attr("x2", j)
 			        .attr("y2", heightthirdline)
 			        .style("stroke", "grey")
-			        .style("stroke-width", 2);            
+			        .style("stroke-width", 1.5);            
 		};   
 
 
@@ -1241,7 +1242,7 @@ var svgfourthline = d3.select("#firstgraph"),
 			        .attr("y1", j)
 			        .attr("x2", widththirdline - 10)
 			        .attr("y2", j)
-			        .style("stroke", "grey")
+			        .style("stroke", "#463F3F")
 			        .style("stroke-dasharray", "4,4")
 			        .style("stroke-width", 2);            
 			};					
@@ -1252,7 +1253,7 @@ var svgfourthline = d3.select("#firstgraph"),
 			        .attr("x2", j)
 			        .attr("y2", heightthirdline)
 			        .style("stroke", "grey")
-			        .style("stroke-width", 2);            
+			        .style("stroke-width", 1.5);            
 		};					
 
         focus.append("path")
