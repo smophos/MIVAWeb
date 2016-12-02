@@ -1,10 +1,12 @@
 <meta charset="utf-8">
 <html>
 <head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <style type="text/css">
 
 body{
+ background: black !important;
 	font-family: "Helvetica", Sans-Serif; 
 }
 #underlay {
@@ -255,6 +257,7 @@ rect.pane {
   background: black;
   width: 100%;
   height: 24px;
+  margin-left: 10px;
 }
 nav li{
   margin-left:-16px;
@@ -331,7 +334,9 @@ nav first:after{
 }
 
 </style>
-
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="http://dc-js.github.io/dc.js/js/d3.js"></script>
     <script type="text/javascript" src="http://dc-js.github.io/dc.js/js/crossfilter.js"></script>
     <script type="text/javascript" src="http://dc-js.github.io/dc.js/js/dc.js"></script>
@@ -399,9 +404,9 @@ var svg = d3.select("body").append("svg").attr("width",width).attr("height", hei
 var medsdata = [{value: 'Meds', color: '#82A29E'},{value: 'Labs', color:'#717E91'},{value:'Imaging', color:'#A49183'},{value:'Actions', color:'#82A29E'},{value:'Notes', color:'#796782'}];
 
 var recttabs = d3.select("#MedsTabs").selectAll("rect").data(medsdata).enter().append("rect")
-			.attr("width", function(d,i){return width/5;})
+			.attr("width", function(d,i){return width/5 - 2;})
 			.attr("height",height/18)
-			.attr("x",function(d,i){return i* width/5;})
+			.attr("x",function(d,i){return i* width/5 + 5;})
 			.attr("y",10)
 			.attr("fill",function(d){return d.color;})
 			.attr("rx",14)
@@ -1740,28 +1745,32 @@ d3.select("#currentreadings").append("text")
 })
 </script>
 <body bgcolor = "black">
-	<nav class="menu">
+  <div class="container-fluid">
+	<div class="row">
+  <nav class="menu">
     <ul>
-      <li><a href="">Lara</a></li>
-      <li><a id ="first" href="">Nicola</a></li>
-      <li><a id ="first" href="">James</a></li>
-      <li><a id ="first" href="">Daniel</a></li>
-      <li><a id ="first" href="">Jacky</a></li>
-      <li><a id ="first" href="">Niel</a></li>
+      <div class="col-sm-2" style="background-color:black;"><li><a href="">Lara</a></li></div>
+      <div class="col-sm-2" style="background-color:black;"><li><a id ="first" href="">Nicola</a></li></div>
+      <div class="col-sm-2" style="background-color:black;"><li><a id ="first" href="">James</a></li></div>
+      <div class="col-sm-2" style="background-color:black;"><li><a id ="first" href="">Daniel</a></li></div>
+      <div class="col-sm-2" style="background-color:black;"><li><a id ="first" href="">Jacky</a></li></div>
+      <div class="col-sm-2" style="background-color:black;"><li><a id ="first" href="">Niel</a></li></div>
     </ul>
 </nav>
+</div>
 <div style="height: 20px; background-color: #8A8C8C; border:3px solid #B4B1B2"></div>
-
+  <div class="row">
 	<nav class="menu">
     <ul>
-      <li><a href="">Eliza</a></li>
-      <li><a href="">Erika</a></li>
-      <li><a href="">Joey</a></li>
-      <li><a href="">Angus</a></li>
-      <li><a href="">Ashley</a></li>
-      <li><a href="">Niel</a></li>
+      <div class="col-sm-4" style="background-color:black;"><li><a href="">Eliza</a></li></div>
+      <div class="col-sm-4" style="background-color:black;"><li><a href="">Erika</a></li></div>
+      <div class="col-sm-4" style="background-color:black;"><li><a href="">Joey</a></li></div>
+      <div class="col-sm-4" style="background-color:black;"><li><a href="">Angus</a></li></div>
+      <div class="col-sm-4" style="background-color:black;"><li><a href="">Ashley</a></li></div>
+      <div class="col-sm-4" style="background-color:black;"><li><a href="">Niel</a></li></div>
     </ul>
 </nav>
-	
+  </div>
+	</div>
 </body>
 </html>
