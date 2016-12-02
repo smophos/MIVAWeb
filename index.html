@@ -268,7 +268,7 @@ nav a{
   position:relative;
   display:inline-block;
   margin:0 22px;
-  padding: 7px 35%;
+  padding: 7px 30%;
   border-radius:4px 4px 0 0;
   text-decoration: none;
   font-size: 1.2rem;
@@ -388,7 +388,7 @@ var svg = d3.select("body").append("svg").attr("width",width).attr("height", hei
 			.attr("stroke-width",4)
 			.attr("fill","#8A8C8C");
 
-var svg = d3.select("body").append("svg").attr("width",width).attr("height", height/18).attr("id","MedsTabs");
+var svg = d3.select("body").append("svg").attr("width",width).attr("height", '6%').attr("id","MedsTabs");
 
 var svg = d3.select("body").append("svg").attr("width",width).attr("height", height/4.8).attr("id","StaticInfoMeds");
 		d3.select("#StaticInfoMeds").append("rect")
@@ -405,7 +405,7 @@ var medsdata = [{value: 'Meds', color: '#82A29E'},{value: 'Labs', color:'#717E91
 
 var recttabs = d3.select("#MedsTabs").selectAll("rect").data(medsdata).enter().append("rect")
 			.attr("width", function(d,i){return width/5 - 2;})
-			.attr("height",height/18)
+			.attr("height",'101%')
 			.attr("x",function(d,i){return i* width/5 + 5;})
 			.attr("y",10)
 			.attr("fill",function(d){return d.color;})
