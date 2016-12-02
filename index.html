@@ -242,8 +242,12 @@ rect.pane {
 }
 
 .menu ul{
-  display: flex;
-   display: inline-flex;
+  -webkit-flex: 1; /* Safari 6.1+ */
+    -ms-flex: 1; /* IE 10 */ 
+    flex: 1;
+   display: -webkit-flex;
+    display: flex;
+  display: inline-flex;
   list-style: none;
   padding: 0;
   justify-content: center;
@@ -436,15 +440,6 @@ d3.select("#StaticInfoMeds").append("rect")
 			.attr("class", "MedsTabsdata");
 
 var data2current = [{h:40, value: 12, unit:"PAP"},{h:40, value: 12, unit:"PAP"},{h:40, value: 12, unit:"PAP"},{h:40, value: 12, unit:"PAP"}];
-
-var currentcircles = d3.select("#currentPAP").selectAll("circle").data(data2current).enter().append("circle")
-					.attr("cx", function(d,i){return width/1.1;})
-					.attr("cy", function(d,i){return height/d.h ;})
-					.attr("r", width/50)
-					.attr("stroke", "#215F65")
-					.attr("stroke-width",2)
-					.attr("fill","#282828")
-
 var medsboxes = d3.select("#currentPAP").selectAll("rect").data(data2current).enter().append("rect")
 					.attr("width", function(d,i){return width/12;})
 					.attr("height",height/19)
@@ -479,11 +474,11 @@ d3.select("#currentPAP").append("text")
 }
 
 
-d3.select("body").append("svg").attr("id","firstgraph").attr("width",width/1.2).attr("height",1100);
+d3.select("body").append("svg").attr("id","firstgraph").attr("width",width/1.15).attr("height",1100);
 
 
 var svgfirstline = d3.select("#firstgraph"),
-    margin1 = {top: 10, right: 20, bottom: 950, left: 40},
+    margin1 = {top: 10, right: 5, bottom: 950, left: 40},
     widthfirstline = +svgfirstline.attr("width") - margin1.left - margin1.right,
     heightfirstline = +svgfirstline.attr("height") - margin1.top - margin1.bottom,
     firstg = svgfirstline.append("g").attr("transform", "translate(" + margin1.left + "," + margin1.top + ")");
@@ -717,7 +712,7 @@ function mouseout() {
 
 
 var svgsecondline = d3.select("#firstgraph"),
-    margin2 = {top: 180, right: 20, bottom: 745, left: 40},
+    margin2 = {top: 180, right: 5, bottom: 745, left: 40},
     widthsecondline = +svgsecondline.attr("width") - margin2.left - margin2.right,
     heightsecondline = +svgsecondline.attr("height") - margin2.top - margin2.bottom,
     secondg = svgsecondline.append("g").attr("transform", "translate(" + margin2.left + "," + margin2.top + ")");
@@ -943,7 +938,7 @@ function mouseout() {
 
 
 var svgthirdline = d3.select("#firstgraph"),
-    margin3 = {top: 390, right: 20, bottom: 540, left: 40},
+    margin3 = {top: 390, right: 5, bottom: 540, left: 40},
     widththirdline = +svgthirdline.attr("width") - margin3.left - margin3.right,
     heightthirdline = +svgthirdline.attr("height") - margin3.top - margin3.bottom,
     thirdgraphg = svgthirdline.append("g").attr("transform", "translate(" + margin3.left + "," + margin3.top + ")");
@@ -1155,7 +1150,7 @@ function mouseout() {
     });
 
 var svgfourthline = d3.select("#firstgraph"),
-    margin4 = {top: 600, right: 20, bottom: 320, left: 40},
+    margin4 = {top: 600, right: 5, bottom: 320, left: 40},
     widthfourthline = +svgfourthline.attr("width") - margin4.left - margin4.right,
     heightfourthline = +svgfourthline.attr("height") - margin4.top - margin4.bottom,
     marginbrush = {top: 820, right: 50, bottom: 270, left: 50},
@@ -1539,12 +1534,12 @@ function mouseout() {
     }
 
 
-d3.select("body").append("svg").attr("id","currentreadings").attr("width",width/7).attr("height",1100);
+d3.select("body").append("svg").attr("id","currentreadings").attr("width",width/8).attr("height",1100);
 
 var medsboxes = d3.select("#currentreadings").append("rect")
-					.attr("width", width/11)
-					.attr("height",height/13)
-					.attr("x", width/30)
+					.attr("width", width/8)
+					.attr("height",height/11)
+					.attr("x", 0)
 					.attr("y", 90)
 					.attr("stroke", "#3D3737")
 					.attr("stroke-width",2)
@@ -1554,18 +1549,18 @@ var medsboxes = d3.select("#currentreadings").append("rect")
 d3.select("#currentreadings").append("text")
 								.text("56")
 								.attr("fill","white")
-								.attr("font-size",width/23)
-								.attr("x",width/20)
+								.attr("font-size",width/18)
+								.attr("x",width/30)
 								.attr("y", 85)
 								.attr("id","PAP")
 								.attr("font-weight","bold");
 
 d3.select("#currentreadings").append("text")
-								.text("PAP")
+								.text("PAP" + "(m)")
 								.attr("fill","white")
-								.attr("font-size",width/40)
-								.attr("x",width/21)
-								.attr("y",130);
+								.attr("font-size",width/30)
+								.attr("x",10)
+								.attr("y",145);
 																
 
 var inter = setInterval(function() {
@@ -1581,8 +1576,8 @@ function getRandomInt(min, max){
 			d3.select("#currentreadings").selectAll("#PAP").remove();
 			d3.select("#currentreadings").append("text").text(newNumber)
 			.attr("fill", function(){if(newNumber <70) return 'white'; else return '#EA7A1E';})
-			.attr("font-size",width/23)
-			.attr("x",width/20)
+			.attr("font-size",width/18)
+			.attr("x",width/30)
 			.attr("y",85)
 			.attr("id","PAP")
 			.attr("font-weight","bold");
@@ -1590,9 +1585,9 @@ function getRandomInt(min, max){
 	
 }
 var medsboxes = d3.select("#currentreadings").append("rect")
-					.attr("width", width/11)
-					.attr("height",height/13)
-					.attr("x", width/30)
+					.attr("width", width/8)
+					.attr("height",height/11)
+					.attr("x", 0)
 					.attr("y", 290)
 					.attr("stroke", "#3D3737")
 					.attr("stroke-width",2)
@@ -1601,8 +1596,8 @@ var medsboxes = d3.select("#currentreadings").append("rect")
 d3.select("#currentreadings").append("text")
 								.text("67")
 								.attr("fill","white")
-								.attr("font-size",width/23)
-								.attr("x",width/20)
+								.attr("font-size",width/18)
+								.attr("x",width/30)
 								.attr("y", 285)
 								.attr("id","SVO2")
 								.attr("font-weight","bold");
@@ -1610,9 +1605,9 @@ d3.select("#currentreadings").append("text")
 d3.select("#currentreadings").append("text")
 								.text("SVO2")
 								.attr("fill","white")
-								.attr("font-size",width/40)
-								.attr("x",width/21)
-								.attr("y", 330);
+								.attr("font-size",width/30)
+								.attr("x",10)
+								.attr("y", 345);
 																
 
 var inter = setInterval(function() {
@@ -1627,8 +1622,8 @@ var inter = setInterval(function() {
 			d3.select("#currentreadings").append("text")
 								.text(newNumberSVO2)
 								.attr("fill",function(){if(newNumberSVO2>70) return '#EA7A1E'; else return 'white';})
-								.attr("font-size",width/23)
-								.attr("x",width/20)
+								.attr("font-size",width/18)
+								.attr("x",width/30)
 								.attr("y", 285)
 								.attr("id","SVO2")
 								.attr("font-weight","bold");
@@ -1636,9 +1631,9 @@ var inter = setInterval(function() {
 	
 }
 var medsboxes = d3.select("#currentreadings").append("rect")
-					.attr("width", width/11)
-					.attr("height",height/13)
-					.attr("x", width/30)
+					.attr("width", width/8)
+					.attr("height",height/11)
+					.attr("x", 0)
 					.attr("y", 500)
 					.attr("stroke", "#3D3737")
 					.attr("stroke-width",2)
@@ -1648,18 +1643,18 @@ var medsboxes = d3.select("#currentreadings").append("rect")
 d3.select("#currentreadings").append("text")
 								.text("77")
 								.attr("fill","white")
-								.attr("font-size",width/23)
-								.attr("x",width/20)
+								.attr("font-size",width/18)
+								.attr("x",width/30)
 								.attr("y", 495)
 								.attr("id","HR")
 								.attr("font-weight","bold");
 
 d3.select("#currentreadings").append("text")
-								.text("HR")
+								.text("H Rate")
 								.attr("fill","white")
-								.attr("font-size",width/40)
-								.attr("x",width/21)
-								.attr("y", 540);
+								.attr("font-size",width/30)
+								.attr("x",10)
+								.attr("y", 555);
 																
 
 var inter = setInterval(function() {
@@ -1671,8 +1666,8 @@ var inter = setInterval(function() {
 			d3.select("#currentreadings").selectAll("#HR").remove();
 			d3.select("#currentreadings").append("text").text(newNumberHR)
 			.attr("fill", function(){if(newNumberHR <50) return 'white'; else return '#EA7A1E';})
-			.attr("font-size",width/23)
-			.attr("x",width/20)
+			.attr("font-size",width/18)
+			.attr("x",width/30)
 			.attr("y",495)
 			.attr("id","HR")
 			.attr("font-weight","bold");
@@ -1681,9 +1676,9 @@ var inter = setInterval(function() {
 }
 
 var medsboxes = d3.select("#currentreadings").append("rect")
-					.attr("width", width/11)
-					.attr("height",height/13)
-					.attr("x", width/30)
+					.attr("width", width/8)
+					.attr("height",height/11)
+					.attr("x", 0)
 					.attr("y", 710)
 					.attr("stroke", "#3D3737")
 					.attr("stroke-width",2)
@@ -1701,11 +1696,11 @@ d3.select("#currentreadings").append("text")
 								.attr("id","BPM");
 
 d3.select("#currentreadings").append("text")
-								.text("BPM")
+								.text("ABP IN")
 								.attr("fill","white")
-								.attr("font-size",width/40)
-								.attr("x",width/21)
-								.attr("y", 750);
+								.attr("font-size",width/30)
+								.attr("x",10)
+								.attr("y", 765);
 																
 
 var interBPM = setInterval(function() {
@@ -1716,7 +1711,7 @@ var interBPM = setInterval(function() {
 			var newNumberBPM = getRandomInt(20,80);
 			d3.select("#currentreadings").selectAll("#BPM").remove();
 			d3.select("#currentreadings").append("text").text(newNumberBPM).attr("fill", function(){if(newNumberBPM <60) return 'white'; else return '#EA7A1E';})
-			.attr("font-size",width/23).attr("x",width/20).attr("y",705)
+			.attr("font-size",width/18).attr("x",width/30).attr("y",705)
 			.attr("id","BPM")
 			.attr("font-weight","bold");
 			
@@ -1737,7 +1732,7 @@ d3.select("#currentreadings").append("text")
                 .text(hours + ":" + minutes + ":" + seconds)
                 .attr("fill","white")
                 .attr("font-size",width/40)
-                .attr("x",width/24)
+                .attr("x",20)
                 .attr("id","time")
                 .attr("y", 845);
 
