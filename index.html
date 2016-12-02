@@ -80,7 +80,7 @@ body{
 .axis path,
 .axis line {
     fill: none;
-    stroke: grey;
+    stroke: #535251;
     stroke-width: 1;
     shape-rendering: crispEdges;
 }
@@ -221,7 +221,7 @@ rect.pane {
   stroke-width: 3px;
 }
 .grid .tick {
-    stroke: lightgrey;
+    stroke: light#535251;
     opacity: 0.3;
 
 }
@@ -412,7 +412,7 @@ var recttabs = d3.select("#MedsTabs").selectAll("rect").data(medsdata).enter().a
 			.attr("fill",function(d){return d.color;})
 			.attr("rx",14)
 			.attr("ry",14)
-			.attr("stroke","grey")
+			.attr("stroke","#535251")
 			.attr("class", "MedsTabs")
 			.on("click", function(d){if (d.value == 'Notes'){if (noteson == '0'){; 
 				noteson = 1; 
@@ -533,16 +533,17 @@ var svgfirstline = d3.select("#firstgraph"),
     d3.csv("line.csv", type, function(error, data) {
         if (error) throw error;
 
-        xfirst.domain([0, data.length]);
-        yfirst.domain([0,d3.max(data, function(d) { return d.y1; })]);
+       xfirst.domain([0, data.length]);
+        yfirst.domain([10,d3.max(data, function(d) { return d.y1; }) + 40]);
 
         x2.domain(xfirst.domain());
     //    y2.domain(y.domain());
 focusfirst.append("rect").attr("width",widthfirstline - 10)
-					.attr("height",53)
+					.attr("height",13)
 					.attr("fill","#629184")
-					.attr("y",23)
-					.attr("x",0);            
+					.attr("y",73)
+					.attr("x",0)
+          .style("opacity",0.4);            
 
     
 
@@ -562,7 +563,7 @@ focusfirst.append("rect").attr("width",widthfirstline - 10)
         .attr("y1", 0)
         .attr("x2", j)
         .attr("y2", heightfirstline)
-        .style("stroke", "grey")
+        .style("stroke", "#535251")
         .style("stroke-width", 1.5);            
 };    
         focusfirst.append("path")
@@ -619,7 +620,7 @@ focusfirst.append("rect").attr("width",widthfirstline - 10)
                     .attr("r", 3.5)
                     .attr("id","tooltipcircle")
                     .style("fill",function(d){
-                       if(d.y1 < 27 || d.y1 > 50)
+                       if(d.y1 < 15 || d.y1 > 25)
                             return "#EA7A1E";
                         else
                             return "#85BDAE";
@@ -763,15 +764,16 @@ var svgsecondline = d3.select("#firstgraph"),
         if (error) throw error;
 
         xsecond.domain([0, data.length]);
-        ysecond.domain([d3.min(data, function(d) { return d.y2; })-20, d3.max(data, function(d) { return d.y2; })+15]);
+        ysecond.domain([d3.min(data, function(d) { return d.y2; })-20, d3.max(data, function(d) { return d.y2; })+35]);
 
         x2.domain(xsecond.domain());
     
         focussecond.append("rect").attr("width",widthfirstline - 10)
-					.attr("height",60)
+					.attr("height",20)
 					.attr("fill","#629184")
-					.attr("y",60)
-					.attr("x",0);            
+					.attr("y",50)
+					.attr("x",0)
+          .style("opacity",0.4);            
 
 		
      	for (var j=1; j <= heightsecondline; j=j+20) {
@@ -790,7 +792,7 @@ var svgsecondline = d3.select("#firstgraph"),
 	        .attr("y1", 0)
 	        .attr("x2", j)
 	        .attr("y2", heightsecondline)
-	        .style("stroke", "grey")
+	        .style("stroke", "#535251")
 	        .style("stroke-width", 1.5);            
 };   
 
@@ -851,7 +853,7 @@ var svgsecondline = d3.select("#firstgraph"),
                     .attr("cy",function (d) {return ysecond(d.y2);})
                     .attr("r", 3.5)
                     .style("fill",function(d){
-                            if(d.y2 < 50 || d.y2 > 68)
+                            if(d.y2 < 70 || d.y2 > 80)
                             return "#EA7A1E";
                         else
                             return "#85BDAE";
@@ -993,13 +995,14 @@ var svgthirdline = d3.select("#firstgraph"),
         if (error) throw error;
 
         xthird.domain([0, data.length]);
-        ythird.domain([0,d3.max(data, function(d) { return d.y3; })+20]);
+        ythird.domain([0,d3.max(data, function(d) { return d.y3; })+110]);
 
     	focusthird.append("rect").attr("width",widthfirstline - 10)
-					.attr("height",60)
+					.attr("height",55)
 					.attr("fill","#629184")
-					.attr("y",70)
-					.attr("x",0);            
+					.attr("y",65)
+					.attr("x",0)
+          .style("opacity", 0.4);            
 
 			for (var j=1; j <= heightthirdline; j=j+20) {
 			    focusthird.append("svg:line")
@@ -1017,7 +1020,7 @@ var svgthirdline = d3.select("#firstgraph"),
 			        .attr("y1", 0)
 			        .attr("x2", j)
 			        .attr("y2", heightthirdline)
-			        .style("stroke", "grey")
+			        .style("stroke", "#535251")
 			        .style("stroke-width", 1.5);            
 		};   
 
@@ -1068,7 +1071,7 @@ var svgthirdline = d3.select("#firstgraph"),
                     .attr("cy",function (d) {return ythird(d.y3);})
                     .attr("r", 3.5)
                     .style("fill",function(d){
-                            if(d.y3 < 18)
+                            if(d.y3 < 60 || d.y3 >100)
                             return "#EA7A1E";
                         else
                             return "#85BDAE";
@@ -1155,11 +1158,225 @@ function mouseout() {
 
     });
 
+
+var svgfifthline = d3.select("#firstgraph"),
+    margin5 = {top: 730, right: -10, bottom: 215, left: 40},
+    widthfifthline = +svgfifthline.attr("width") - margin5.left - margin5.right,
+    heightfifthline = +svgfifthline.attr("height") - margin5.top - margin5.bottom,
+    fifthgraphg = svgfifthline.append("g").attr("transform", "translate(" + margin5.left + "," + margin5.top + ")");
+
+    var parseDate = d3.timeParse("%b %Y");
+
+    var xfifth = d3.scaleTime().range([0, widthfifthline]),
+            yfifth = d3.scaleLinear().range([heightfifthline, 0]);
+//            y2 = d3.scaleLinear().range([heightbrush, 0]);
+
+
+
+    var xAxisfifth = d3.axisBottom(xfifth),
+            yAxisfifth = d3.axisLeft(yfifth);
+
+    xAxisfifth.ticks(5);
+    xAxisfifth.tickSize(5);
+
+    var linefifth = d3.line()
+            .curve(d3.curveMonotoneX)
+            .x(function(d,i) { return xfifth(i); })
+            .y(function(d) { return yfifth(d.y5); });
+
+    var areafifth = d3.area()
+            .curve(d3.curveMonotoneX)
+            .x(function(d,i) { return xfifth(i); })
+            .y0(heightfifthline)
+            .y1(function(d) { return yfifth(d.y5); });
+
+
+    svgfifthline.append("defs").append("clipPath")
+            .attr("id", "clip")
+            .append("rect")
+            .attr("width", widthfifthline)
+            .attr("height", heightfifthline);
+
+    var focusfifth = svgfifthline.append("g")
+            .attr("class", "focus")
+            .attr("transform", "translate(" + margin5.left + "," + margin5.top + ")");
+
+//    var context = svgthirdline.append("g")
+//            .attr("class", "context")
+///            .attr("transform", "translate(" + marginbrush.left + "," + marginbrush.top + ")");
+
+    d3.csv("line.csv", type, function(error, data) {
+        if (error) throw error;
+
+        xfifth.domain([0, data.length]);
+        yfifth.domain([0,d3.max(data, function(d) { return d.y3; })+110]);
+
+      focusfifth.append("rect").attr("width",widthfifthline - 10)
+          .attr("height",10)
+          .attr("fill","#629184")
+          .attr("y",75)
+          .attr("x",0)
+          .style("opacity",0.4);            
+
+      for (var j=1; j <= heightfifthline; j=j+20) {
+          focusfifth.append("svg:line")
+              .attr("x1", 0)
+              .attr("y1", j)
+              .attr("x2", widthfifthline - 10)
+              .attr("y2", j)
+              .style("stroke", "#463F3F")
+              .style("stroke-dasharray", "4,4")
+              .style("stroke-width", 2);            
+      };          
+        for (var j=1; j <= widthfifthline - 10; j=j+20) {
+          focusfifth.append("svg:line")
+              .attr("x1", j)
+              .attr("y1", 0)
+              .attr("x2", j)
+              .attr("y2", heightfifthline)
+              .style("stroke", "#535251")
+              .style("stroke-width", 1.5);            
+    };   
+
+
+        focusfifth.append("path")
+                .data([data])
+                .attr("class", "line")
+                .attr("d", linefifth);
+
+        focusfifth.append("path")
+                .datum(data)
+                .attr("class", "area")
+                .attr("d", areafifth);
+
+        focusfifth.selectAll('circle')
+                .data(data)
+                .enter().append("circle")
+                .attr("class", "dot")
+                .attr("cx", function(d,i) { return xfifth(i); })
+                .attr("cy", function(d) { return yfifth(d.y5); })
+                .attr("r", 3.5);
+
+        focusfifth.append("g")
+                .attr("class", "axis axis--x")
+                .attr("transform", "translate(0," + heightfifthline + ")")
+                .call(xAxisfifth);
+
+        focusfifth.append("g")
+                .attr("class", "axis axis--y")
+                .call(yAxisfifth);
+
+        function redrawWithoutAnimation() {
+           
+            focusfifth.select('path')
+                   .attr("d", linefifth)
+                    //.attr("transform",null)
+                    .transition()
+                    .duration(500)
+                    .ease(d3.easeLinear);
+                  
+            focusfifth.select('.area')
+                    .attr("d",areafifth).transition();
+
+            focusfifth.selectAll('circle')
+                    .data(data)
+                   
+                    .attr("cx",function (d,i) {  return xfifth(i);})
+                    .attr("cy",function (d) {return yfifth(d.y5);})
+                    .attr("r", 3.5)
+                    .style("fill",function(d){
+                            if(d.y5 < 94 || d.y5>99)
+                            return "#EA7A1E";
+                        else
+                            return "#85BDAE";
+                    })  .on("mouseover", mouseover)
+            .on("mousemove", mousemove)
+            .on("mouseout", mouseout)
+            .on("click",mouseclick);
+
+
+  var div = d3.select("body").append("div")
+      .attr("class", "tooltip")
+      .style("display", "none");
+    
+      function mouseclick(){
+          div.style("display", "inline");
+            div
+          .text(d3.event.pageY)
+          .style("left", (d3.event.pageX - 34) + "px")
+          .style("top", (d3.event.pageY - 12) + "px");
+      }
+
+
+    function mouseover() {
+    
+      d3.selectAll("#tooltipline").remove();
+      d3.selectAll("#toolcircle").remove();
+    }
+    function mousemove() {
+    
+           d3.selectAll("#tooltipline").remove();
+           d3.selectAll("#toolcircle").remove();
+
+           d3.select("#firstgraph").append("line").attr("x1",function(){return d3.event.pageX -4;})
+                        .attr("x2",function(){return d3.event.pageX - 4;})
+                        .attr("y1",10)
+                        .attr("y2", 850)
+                        .attr("stroke","#EA7A1E")
+                        .attr("stroke-width",3)
+                        .attr("id","tooltipline");
+        d3.select("#firstgraph").append("circle").attr("cx",function(){return d3.event.pageX -4;})
+                      .attr("cy",5)
+                      .attr("r",5)
+                      .attr("fill","#EA7A1E")
+                      .attr("id","toolcircle");
+
+        d3.select("#firstgraph").append("circle").attr("cx",function(){return d3.event.pageX -4;})
+                      .attr("cy",845)
+                      .attr("r",5)
+                      .attr("fill","#EA7A1E")
+                      .attr("id","toolcirclebelow");                      
+   
+}
+function mouseout() {
+  div.style("display", "none");
+  d3.selectAll("#tooltipline").remove();
+  d3.selectAll("#toolcircle").remove();
+  d3.selectAll("#toolcirclebelow").remove();
+}
+            
+
+        }
+
+
+        function getRandomInt(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min)) + min;
+        }
+
+        setInterval(function() {
+
+            //var v = data.slice(-1)[0];
+            //var v = data[data.length-1];
+
+            var v = data.slice(0,1);
+            //var v ={ x: getRandomInt(1,60), y1: getRandomInt(4, 70), y2: getRandomInt(4, 70), y3: getRandomInt(4, 70), y4: getRandomInt(4, 70)};
+           data.push(v[0]);
+            data.shift();
+
+            redrawWithoutAnimation();
+
+        }, 500);
+
+
+    });
+
 var svgfourthline = d3.select("#firstgraph"),
     margin4 = {top: 520, right: -10, bottom: 380, left: 40},
     widthfourthline = +svgfourthline.attr("width") - margin4.left - margin4.right,
     heightfourthline = +svgfourthline.attr("height") - margin4.top - margin4.bottom,
-    marginbrush = {top: 820, right: 80, bottom: 270, left: 40},
+    marginbrush = {top: 910, right: 80, bottom: 175, left: 40},
     heightbrush = +svgfourthline.attr("height") - marginbrush.top - marginbrush.bottom,
 
     fourthg = svgfourthline.append("g").attr("transform", "translate(" + margin4.left + "," + margin4.top + ")");
@@ -1226,16 +1443,17 @@ var svgfourthline = d3.select("#firstgraph"),
         if (error) throw error;
 
         x.domain([0, data.length]);
-        y.domain([d3.min(data, function(d) { return d.y4; })-10, d3.max(data, function(d) { return d.y4; })+20]);
+        y.domain([d3.min(data, function(d) { return d.y4; })-10, d3.max(data, function(d) { return d.y4; })+90]);
 
         x2.domain(x.domain());
         y2.domain(y.domain());
 
         focus.append("rect").attr("width",widthfirstline - 10)
-					.attr("height",64)
+					.attr("height",83)
 					.attr("fill","#629184")
-					.attr("y",80)
-					.attr("x",0);            
+					.attr("y",30)
+					.attr("x",0)
+          .style("opacity",0.4);            
 		
 		for (var j=1; j <= heightthirdline; j=j+20) {
 			    focus.append("svg:line")
@@ -1253,7 +1471,7 @@ var svgfourthline = d3.select("#firstgraph"),
 			        .attr("y1", 0)
 			        .attr("x2", j)
 			        .attr("y2", heightthirdline)
-			        .style("stroke", "grey")
+			        .style("stroke", "#535251")
 			        .style("stroke-width", 1.5);            
 		};					
 
@@ -1332,7 +1550,7 @@ var svgfourthline = d3.select("#firstgraph"),
                     .attr("cy",function (d) {return y(d.y4);})
                     .attr("r", 3.5)
                     .style("fill",function(d){
-                       if(d.y4 < 50 || d.y4 > 68)
+                       if(d.y4 < 90 || d.y4 > 140)
                             return "#EA7A1E";
                         else
                             return "#85BDAE";
@@ -1432,6 +1650,7 @@ function mouseout() {
         xfirst.domain(s.map(x2.invert, x2));
 		xsecond.domain(s.map(x2.invert, x2));
 		xthird.domain(s.map(x2.invert, x2));
+    xfifth.domain(s.map(x2.invert, x2));
 
 		focus.select(".line").attr("d", line);
         focus.select(".area").attr("d", area);
@@ -1465,6 +1684,14 @@ function mouseout() {
 				.attr("r", 3.5);
 		focusthird.select(".axis--x").call(xAxisThird);
 
+    focusfifth.select(".line").attr("d", linefifth);
+    focusfifth.select(".area").attr("d", areafifth);
+    focusfifth.selectAll('circle')
+        .attr("cx",function (d,i) {return xfifth(i);})
+        .attr("cy",function (d) {return yfifth(d.y3);})
+        .attr("r", 3.5);
+    focusfifth.select(".axis--x").call(xAxisfifth);
+
 
 		svgthirdline.select(".zoom").call(zoom.transform, d3.zoomIdentity
 				.scale(widththirdline / (s[1] - s[0]))
@@ -1480,6 +1707,10 @@ function mouseout() {
 
 		svgfourthline.select(".zoom").call(zoom.transform, d3.zoomIdentity
                 .scale(widthfourthline / (s[1] - s[0]))
+                .translate(-s[0], 0));
+
+    svgfifthline.select(".zoom").call(zoom.transform, d3.zoomIdentity
+                .scale(widthfifthline / (s[1] - s[0]))
                 .translate(-s[0], 0));
     }
 
@@ -1522,6 +1753,14 @@ function mouseout() {
 				.attr("cy",function (d) {return ythird(d.y3);})
 				.attr("r", 3.5);
 		focusthird.select(".axis--x").call(xAxisThird);
+
+    focusfifth.select(".line").attr("d", linefifth);
+    focusfifth.select(".area").attr("d", areafifth);
+    focusfifth.selectAll('circle')
+        .attr("cx",function (d,i) {return xfifth(i);})
+        .attr("cy",function (d) {return yfifth(d.y3);})
+        .attr("r", 3.5);
+    focusfifth.select(".axis--x").call(xAxisfifth);
 
 
 		context.select(".brush").call(brush.move, x.range().map(t.invertX, t));
@@ -1578,10 +1817,10 @@ function getRandomInt(min, max){
 }
  function updateData(){
  		
-			var newNumber = getRandomInt(50,90);
+			var newNumber = getRandomInt(10,30);
 			d3.select("#currentreadings").selectAll("#PAP").remove();
 			d3.select("#currentreadings").append("text").text(newNumber)
-			.attr("fill", function(){if(newNumber <70) return 'white'; else return '#EA7A1E';})
+			.attr("fill", function(){if(newNumber <26 && newNumber >14)return 'white'; else return '#EA7A1E';})
 			.attr("font-size",width/21)
 			.attr("x",width/30)
 			.attr("y",54)
@@ -1621,13 +1860,13 @@ var inter = setInterval(function() {
         }, 3000); 
  function updateDataSVO2(){
  		
-			var newNumberSVO2 = getRandomInt(60,80);;
+			var newNumberSVO2 = getRandomInt(60,85);;
 			
 			d3.select("#currentreadings").selectAll("#SVO2").remove();
 			
 			d3.select("#currentreadings").append("text")
 								.text(newNumberSVO2)
-								.attr("fill",function(){if(newNumberSVO2>70) return '#EA7A1E'; else return 'white';})
+								.attr("fill",function(){if(newNumberSVO2>69 && newNumberSVO2<81) return '#EA7A1E'; else return 'white';})
 								.attr("font-size",width/21)
 								.attr("x",width/30)
 								.attr("y", 234)
@@ -1636,11 +1875,56 @@ var inter = setInterval(function() {
 			
 	
 }
+
+var medsboxes = d3.select("#currentreadings").append("rect")
+          .attr("width", width/8)
+          .attr("height",'4%')
+          .attr("x", 0)
+          .attr("y", 440)
+          .attr("stroke", "#3D3737")
+          .attr("stroke-width",2)
+        //  .attr("class","current")
+          .attr("fill","#215F65");
+
+d3.select("#currentreadings").append("text")
+                .text("77")
+                .attr("fill","white")
+                .attr("font-size",width/21)
+                .attr("x",width/30)
+                .attr("y", 439)
+                .attr("id","HR")
+                .attr("font-weight","bold");
+
+d3.select("#currentreadings").append("text")
+                .text("H Rate")
+                .attr("fill","white")
+                .attr("font-size",width/40)
+                .attr("x",4)
+                .attr("y", 475);
+                                
+
+var inter = setInterval(function() {
+                updateDataHR();
+        }, 3000); 
+ function updateDataHR(){
+    
+      var newNumberHR = getRandomInt(65,110);
+      d3.select("#currentreadings").selectAll("#HR").remove();
+      d3.select("#currentreadings").append("text").text(newNumberHR)
+      .attr("fill", function(){if(newNumberHR <101 && newNumberHR > 59) return 'white'; else return '#EA7A1E';})
+      .attr("font-size",width/21)
+      .attr("x",width/30)
+      .attr("y",439)
+      .attr("id","HR")
+      .attr("font-weight","bold");
+      
+  
+}
 var medsboxes = d3.select("#currentreadings").append("rect")
 					.attr("width", width/8)
 					.attr("height",'4%')
 					.attr("x", 0)
-					.attr("y", 440)
+					.attr("y", 840)
 					.attr("stroke", "#3D3737")
 					.attr("stroke-width",2)
 				//	.attr("class","current")
@@ -1651,34 +1935,82 @@ d3.select("#currentreadings").append("text")
 								.attr("fill","white")
 								.attr("font-size",width/21)
 								.attr("x",width/30)
-								.attr("y", 439)
-								.attr("id","HR")
+								.attr("y", 839)
+								.attr("id","SPO2")
 								.attr("font-weight","bold");
 
 d3.select("#currentreadings").append("text")
-								.text("H Rate")
+								.text("SPO2")
 								.attr("fill","white")
 								.attr("font-size",width/40)
 								.attr("x",4)
-								.attr("y", 475);
+								.attr("y", 875);
 																
 
 var inter = setInterval(function() {
-                updateDataHR();
+                updateDataSPO2();
         }, 3000); 
- function updateDataHR(){
+ function updateDataSPO2(){
  		
-			var newNumberHR = getRandomInt(20,70);
-			d3.select("#currentreadings").selectAll("#HR").remove();
-			d3.select("#currentreadings").append("text").text(newNumberHR)
-			.attr("fill", function(){if(newNumberHR <50) return 'white'; else return '#EA7A1E';})
+			var newNumberSPO2 = getRandomInt(90,100);
+			d3.select("#currentreadings").selectAll("#SPO2").remove();
+			d3.select("#currentreadings").append("text").text(newNumberSPO2)
+			.attr("fill", function(){if(newNumberSPO2 <100 && newNumberSPO2>93) return 'white'; else return '#EA7A1E';})
 			.attr("font-size",width/21)
 			.attr("x",width/30)
-			.attr("y",439)
-			.attr("id","HR")
+			.attr("y",839)
+			.attr("id","SPO2")
 			.attr("font-weight","bold");
 			
 	
+}
+var medsboxes = d3.select("#currentreadings").append("rect")
+          .attr("width", width/8)
+          .attr("height",'4%')
+          .attr("x", 0)
+          .attr("y", 55)
+          .attr("stroke", "#3D3737")
+          .attr("stroke-width",2)
+        //  .attr("class","current")
+          .attr("fill","#215F65");
+
+d3.select("#currentreadings").append("text")
+                .text("56")
+                .attr("fill","white")
+                .attr("font-size",width/21)
+                .attr("x",width/30)
+                .attr("y", 54)
+                .attr("id","PAP")
+                .attr("font-weight","bold");
+
+d3.select("#currentreadings").append("text")
+                .text("PAP" + "(m)")
+                .attr("fill","white")
+                .attr("font-size",width/40)
+                .attr("x",4)
+                .attr("y",90);
+                                
+
+var inter = setInterval(function() {
+                updateData();
+        }, 5000); 
+
+function getRandomInt(min, max){
+  return Math.round(Math.random() * (max - min)) + min;
+}
+ function updateData(){
+    
+      var newNumber = getRandomInt(10,27);
+      d3.select("#currentreadings").selectAll("#PAP").remove();
+      d3.select("#currentreadings").append("text").text(newNumber)
+      .attr("fill", function(){if(newNumber <26 && newNumber>15) return 'white'; else return '#EA7A1E';})
+      .attr("font-size",width/21)
+      .attr("x",width/30)
+      .attr("y",54)
+      .attr("id","PAP")
+      .attr("font-weight","bold");
+      
+  
 }
 
 var medsboxes = d3.select("#currentreadings").append("rect")
@@ -1740,7 +2072,7 @@ d3.select("#currentreadings").append("text")
                 .attr("font-size",width/40)
                 .attr("x",20)
                 .attr("id","time")
-                .attr("y", 845);
+                .attr("y", 935);
 
 }
 })
